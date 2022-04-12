@@ -132,8 +132,9 @@ class LGPMA(TwoStageDetector):
                                                     gt_bboxes_ignore, gt_masks,
                                                     **kwargs)
         except:
-            print("ERROR in roi loss calculation", img_metas)
-            raise ValueError
+            err_str = f"ERROR in roi loss calculation\n{img_metas}"
+            print(err_str)
+            raise ValueError(err_str)
 
         losses.update(roi_losses)
 
