@@ -126,10 +126,15 @@ class LGPMA(TwoStageDetector):
         else:
             proposal_list = proposals
 
-        roi_losses = self.roi_head.forward_train(x, img_metas, proposal_list,
-                                                 gt_bboxes, gt_labels,
-                                                 gt_bboxes_ignore, gt_masks,
-                                                 **kwargs)
+        try:
+            roi_losses = self.roi_head.forward_train(x, img_metas, proposal_list,
+                                                    gt_bboxes, gt_labels,
+                                                    gt_bboxes_ignore, gt_masks,
+                                                    **kwargs)
+        except:
+            print("ERROR in roi loss calculation", img_metas)
+            raise ValueError
+
         losses.update(roi_losses)
 
         # global forward and loss
