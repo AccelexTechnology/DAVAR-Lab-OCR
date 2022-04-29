@@ -3,26 +3,24 @@
 # Copyright Info :    Copyright (c) Davar Lab @ Hikvision Research Institute. All rights reserved.
 # Filename       :    lgpma.py
 # Abstract       :    The main pipeline definition of LGPMA model
-
 # Current Version:    1.0.0
 # Date           :    2021-09-18
 ##################################################################################################
 """
 
-from torch import nn
+import torch
+from davarocr.davar_common.core import build_postprocess
 from mmdet.models import builder
 from mmdet.models.builder import DETECTORS
 from mmdet.models.detectors.two_stage import TwoStageDetector
-from davarocr.davar_common.core import build_postprocess
+from torch import nn
 
 
 @DETECTORS.register_module()
 class LGPMA(TwoStageDetector):
     """Implementation of LGPMA detector model.
-
     Ref: Qiao L, Li Z, Cheng Z, et al. LGPMA: Complicated Table Structure Recognition with Local and Global Pyramid Mask
      Alignment[J]. arXiv preprint arXiv:2105.06224, 2021. (Accepted by ICDAR 2021, Best Industry Paper)
-
     """
 
     def __init__(self,
@@ -74,7 +72,7 @@ class LGPMA(TwoStageDetector):
         """
 
         return hasattr(self, 'global_seg_head') and self.global_seg_head is not None
-
+                  
     def forward_train(self,
                       img,
                       img_metas,
@@ -86,7 +84,6 @@ class LGPMA(TwoStageDetector):
                       gt_semantic_seg=None,
                       **kwargs):
         """ Forward train process.
-
         Args:
             img (Tensor): of shape (N, C, H, W) encoding input images.
                 Typically these should be mean centered and std scaled.
@@ -102,13 +99,11 @@ class LGPMA(TwoStageDetector):
             proposals: override rpn proposals with custom proposals. Use when `with_rpn` is False.
             gt_semantic_seg (None | Tensor) : true global segmentation masks for the whole image used if the
                 architecture supports a global segmentation task.
-
         Returns:
             dict[str, Tensor]: a dictionary of loss components
         """
 
         x = self.extract_feat(img)
-
         losses = dict()
 
         # RPN forward and loss
@@ -126,10 +121,25 @@ class LGPMA(TwoStageDetector):
         else:
             proposal_list = proposals
 
-        roi_losses = self.roi_head.forward_train(x, img_metas, proposal_list,
-                                                 gt_bboxes, gt_labels,
-                                                 gt_bboxes_ignore, gt_masks,
-                                                 **kwargs)
+        try:
+            roi_losses = self.roi_head.forward_train(x, img_metas, proposal_list,
+                                                    gt_bboxes, gt_labels,
+                                                    gt_bboxes_ignore, gt_masks,
+                                                    **kwargs)
+        except:
+            err_str = f"ERROR in roi loss calculation\n{img_metas}"
+            print(err_str)
+            raise ValueError(err_str)
+
+        try:
+            if torch.any(torch.isnan(x)):
+                err_str = f"The value is NAN\n{x}\n{img_metas}"
+                raise ValueError (err_str)
+        except:
+            pass
+
+
+
         losses.update(roi_losses)
 
         # global forward and loss
@@ -145,16 +155,13 @@ class LGPMA(TwoStageDetector):
 
     def simple_test(self, img, img_metas, proposals=None, rescale=False):
         """ Forward test process
-
         Args:
             img(Tensor): input images
             img_metas(dict): image meta infos
             proposals(None | list): if region proposals is assigned before, using it
             rescale(boolean): if the image be re-scaled
-
         Returns:
             list(str): Format results, like [html of table1 (str), html of table2 (str), ...]
-
         """
         assert self.with_mask, 'Mask head must be implemented.'
         results = super(LGPMA, self).simple_test(img, img_metas, proposals, rescale)
