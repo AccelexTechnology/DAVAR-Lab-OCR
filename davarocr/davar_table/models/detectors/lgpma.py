@@ -9,7 +9,6 @@
 """
 
 import torch
-from davarocr.davar_common.core import build_postprocess
 from mmdet.models import builder
 from mmdet.models.builder import DETECTORS
 from mmdet.models.detectors.two_stage import TwoStageDetector
