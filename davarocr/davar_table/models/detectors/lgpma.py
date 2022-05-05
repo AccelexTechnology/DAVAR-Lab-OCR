@@ -8,6 +8,7 @@
 ##################################################################################################
 """
 
+from asyncio.log import logger
 import torch
 from mmdet.models import builder
 from mmdet.models.builder import DETECTORS
@@ -102,7 +103,8 @@ class LGPMA(TwoStageDetector):
         Returns:
             dict[str, Tensor]: a dictionary of loss components
         """
-
+        logger.warning(f'{img_metas}')
+        
         x = self.extract_feat(img)
         losses = dict()
 
@@ -133,11 +135,11 @@ class LGPMA(TwoStageDetector):
 
         try:
             if torch.any(torch.isnan(x)):
-                err_str = f"The value is NAN\n{x}\n{img_metas}"
+                err_str = f"The value is nan\n{x}\n{img_metas}"
                 raise ValueError (err_str)
         except:
             pass
-
+        
 
 
         losses.update(roi_losses)

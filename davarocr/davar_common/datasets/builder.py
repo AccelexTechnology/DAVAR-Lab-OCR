@@ -8,6 +8,7 @@
 # Date           :    2020-05-31
 ##################################################################################################
 """
+from asyncio.log import logger
 import copy
 import platform
 from functools import partial
@@ -86,7 +87,7 @@ def davar_build_dataloader(
     Returns:
         the training data loader
     """
-
+    logger.warning(f'dataset {dataset}')
     rank, world_size = get_dist_info()
 
     if sampler_type is not None:
