@@ -10,7 +10,6 @@
 """
 import argparse
 import copy
-from logging import Logger
 import os
 import os.path as osp
 import time
@@ -226,7 +225,7 @@ def main():
         raise NotImplementedError
 
     datasets = [davar_build_dataset(cfg.data.train)]
-    Logger.warning(f'main func datasets:\n{datasets}')
+    logger.warning(f'main func datasets:\n{datasets}')
     runner.logger.info(f'main func datasets:\n{datasets}')
     if len(cfg.workflow) == 2:
         val_dataset = copy.deepcopy(cfg.data.val)

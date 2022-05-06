@@ -8,7 +8,7 @@
 # Date           :    2021-05-01
 ##################################################################################################
 """
-from logging import Logger
+from asyncio.log import logger
 from davarocr.mmcv import runner
 from mmcv.runner import CheckpointHook
 import os
@@ -258,7 +258,8 @@ def main():
                                     outputs = multi_gpu_test(model, data_loader, args.tmpdir,
                                                              args.gpu_collect, model_type="RECOGNIZOR")
                                     runner.logger.info(f'r.multiple gpu test outputs:\n{outputs}')
-                                    Logger.warning(f'L.multiple gpu test outputs:\n{outputs}')
+                                    logger.info(f'L.multiple gpu test outputs:\n{outputs}')
+                                    logger.warning(f'L.multiple gpu test outputs:\n{outputs}')
                                 rank, _ = get_dist_info()
                                 if rank == 0:
                                     # save the model prediction result

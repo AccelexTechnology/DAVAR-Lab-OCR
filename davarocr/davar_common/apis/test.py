@@ -9,6 +9,7 @@
 # Date           :    2021-05-20
 ##################################################################################################
 """
+from asyncio.log import logger
 from logging import Logger
 import os.path as osp
 from davarocr.mmcv import runner
@@ -48,7 +49,7 @@ def single_gpu_test(model,
     results = []
     dataset = data_loader.dataset
     runner.logger.info(f'ddataset:\n{dataset}')
-    Logger.warning(f'l.dataset:\n{dataset}')
+    logger.info(f'ddataset:\n{dataset}')
     prog_bar = mmcv.ProgressBar(len(dataset))
     for _, data in enumerate(data_loader):
         with torch.no_grad():
@@ -65,7 +66,7 @@ def single_gpu_test(model,
                     img_tensor = data['img'][0].data[0]
                 img_metas = data['img_metas'][0].data[0]
                 runner.logger.info(f'img metas when model type is DETECTOR :\n{img_metas}')
-                Logger.warning(f'l.img metas when model type is DETECTOR:\n{img_metas}')
+                logger.info(f'l.img metas when model type is DETECTOR:\n{img_metas}')
                 imgs = tensor2imgs(img_tensor, **img_metas[0]['img_norm_cfg'])
                 assert len(imgs) == len(img_metas)
 
