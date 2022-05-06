@@ -8,6 +8,9 @@
 # Date           :    2021-05-01
 ##################################################################################################
 """
+from logging import Logger
+from davarocr.mmcv import runner
+from mmcv.runner import CheckpointHook
 import os
 import sys
 import json
@@ -248,11 +251,14 @@ def main():
                                     model = MMDataParallel(model, device_ids=[0])
                                     outputs = single_gpu_test(model, data_loader,
                                                               args.show, model_type="RECOGNIZOR")
+                                    runner.logger.info(f'single gpu test outputs:\n{outputs}')
                                 else:
                                     # multiple gpu test
                                     model = MMDistributedDataParallel(model.cuda())
                                     outputs = multi_gpu_test(model, data_loader, args.tmpdir,
                                                              args.gpu_collect, model_type="RECOGNIZOR")
+                                    runner.logger.info(f'r.multiple gpu test outputs:\n{outputs}')
+                                    Logger.warning(f'L.multiple gpu test outputs:\n{outputs}')
                                 rank, _ = get_dist_info()
                                 if rank == 0:
                                     # save the model prediction result

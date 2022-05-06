@@ -8,8 +8,9 @@
 # Date           :    2021-06-02
 ##################################################################################################
 """
+from logging import Logger
 import numpy as np
-
+from davarocr.mmcv import runner
 import mmcv
 import torch
 
@@ -33,8 +34,12 @@ def single_gpu_test(model,
     results['glimpses'] = []
     results['scores'] = []
     dataset = data_loader.dataset
+    Logger.warning(f'L.single gpu test dataset:\{dataset}]')
+    runner.logger.info(f'r.single gpu test dataset:\{dataset}]')
     prog_bar = mmcv.ProgressBar(len(dataset))
     for i, data in enumerate(data_loader):
+        Logger.warning(f'L.loop in data_loader:\{i, data}]')
+        runner.logger.info(f'r.loop in data_loader:\{i, data}]')
         with torch.no_grad():
             result = model(return_loss=False, rescale=True, **data)
         texts = result['text']

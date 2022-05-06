@@ -9,7 +9,8 @@
 """
 
 from asyncio.log import logger
-import torch
+from davarocr.mmcv import runner
+# import torch
 from mmdet.models import builder
 from mmdet.models.builder import DETECTORS
 from mmdet.models.detectors.two_stage import TwoStageDetector
@@ -103,8 +104,8 @@ class LGPMA(TwoStageDetector):
         Returns:
             dict[str, Tensor]: a dictionary of loss components
         """
-        logger.warning(f'{img_metas}')
-        
+        logger.warning(f'r.image metadata:\n{img_metas}')
+        runner.logger.info(f'image metadata:\n{img_metas}')
         x = self.extract_feat(img)
         losses = dict()
 
@@ -119,6 +120,8 @@ class LGPMA(TwoStageDetector):
                 gt_labels=None,
                 gt_bboxes_ignore=gt_bboxes_ignore,
                 proposal_cfg=proposal_cfg)
+            logger.warning(f'L.rpn losses:\n{rpn_losses}')
+            runner.logger.info(f'r.rpn losses:\n{rpn_losses}')
             losses.update(rpn_losses)
         else:
             proposal_list = proposals
@@ -133,12 +136,12 @@ class LGPMA(TwoStageDetector):
             print(err_str)
             raise ValueError(err_str)
 
-        try:
-            if torch.any(torch.isnan(x)):
-                err_str = f"The value is nan\n{x}\n{img_metas}"
-                raise ValueError (err_str)
-        except:
-            pass
+        # try:
+        #     if torch.any(torch.isnan(x)):
+        #         err_str = f"The value is nan\n{x}\n{img_metas}"
+        #         raise ValueError (err_str)
+        # except:
+        #     pass
         
 
 
@@ -151,6 +154,8 @@ class LGPMA(TwoStageDetector):
             seg_pred = self.global_seg_head(x)
             seg_targets = self.global_seg_head.get_target(gt_semantic_seg)
             loss_global_seg = self.global_seg_head.loss(seg_pred, seg_targets)
+            logger.warning(f'L.loss global segmentation:\n{loss_global_seg}')
+            runner.logger.info(f'r.loss global segmentation:\n{loss_global_seg}')
             losses.update(loss_global_seg)
 
         return losses

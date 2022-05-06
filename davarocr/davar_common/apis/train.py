@@ -9,6 +9,7 @@
 # Date           :    2021-05-20
 ##################################################################################################
 """
+from logging import Logger
 import warnings
 
 import torch
@@ -43,11 +44,16 @@ def train_model(model,
         meta(dict): prepared meta information for runner.
     """
     logger = get_root_logger(cfg.log_level)
-
+    logger.warning(f'l.wa.log level\n{cfg.log_level}')
+    logger.info(f'l.in.log level\n{cfg.log_level}')
+    Logger.warning(f'L.log level\n{cfg.log_level}')
     # prepare data loaders
     dataset = dataset if isinstance(dataset, (list, tuple)) else [dataset]
+    Logger.warning(f'l.prepare data loaders\n{dataset}')
     if 'imgs_per_gpu' in cfg.data:
-        logger.warning('"imgs_per_gpu" is deprecated in MMDet V2.0. '
+        logger.warning('imgs_per_gpu is deprecated in MMDet V2.0. '
+                       'Please use "samples_per_gpu" instead')
+        Logger.warning('L.imgs_per_gpu is deprecated in MMDet V2.0. '
                        'Please use "samples_per_gpu" instead')
         if 'samples_per_gpu' in cfg.data:
             logger.warning(
@@ -59,9 +65,9 @@ def train_model(model,
                 'Automatically set "samples_per_gpu"="imgs_per_gpu"='
                 '{} in this experiments'.format(cfg.data.imgs_per_gpu))
         cfg.data.samples_per_gpu = cfg.data.imgs_per_gpu
-
+        logger.warning(f'l.w.data samples per gpu\n{cfg.data.samples_per_gpu}')
+        Logger.warning(f'L.data samples per gpu\n{cfg.data.samples_per_gpu}')
     cfg_sampler = cfg.data.get("sampler", None)
-
     data_loaders = [
         davar_build_dataloader(
             ds,
@@ -71,7 +77,9 @@ def train_model(model,
             len(cfg.gpu_ids),  # cfg.gpus will be ignored if distributed
             dist=distributed,
             seed=cfg.seed) for ds in dataset]
-
+    logger.warning(f'l.wa.data loaders:\n{data_loaders}')
+    logger.info(f'l.in.data loaders:\n{data_loaders}')
+    Logger.warning(f'L.data loaders:\n{data_loaders}')
     # put model on gpus
     if distributed:
         find_unused_parameters = cfg.get('find_unused_parameters', False)

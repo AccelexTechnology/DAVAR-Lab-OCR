@@ -9,7 +9,10 @@
 # Date           :    2021-05-20
 ##################################################################################################
 """
+from logging import Logger
+from davarocr.mmcv import runner
 import warnings
+from davarocr.mmcv import runner
 import torch
 import numpy as np
 import mmcv
@@ -145,8 +148,12 @@ def inference_model(model, imgs):
                 data = dict(img_info=img)
             else:
                 data = dict(img=img)
+            runner.l.warning(f'If the input are batch of images:\n{data}')
             data = test_pipeline(data)
             batch_data.append(data)
+            
+            runner.logger.info(f'batch data:\n{batch_data}')
+            Logger.warning(f'l.batch data:\n{batch_data}')
         data_collate = collate(batch_data, samples_per_gpu=len(batch_data))
         data = scatter(data_collate, [gpu_device_num])[0]
 

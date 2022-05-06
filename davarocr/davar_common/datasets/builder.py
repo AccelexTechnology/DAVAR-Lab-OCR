@@ -87,7 +87,6 @@ def davar_build_dataloader(
     Returns:
         the training data loader
     """
-    logger.warning(f'dataset {dataset}')
     rank, world_size = get_dist_info()
 
     if sampler_type is not None:
