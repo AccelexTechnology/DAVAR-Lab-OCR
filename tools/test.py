@@ -9,6 +9,7 @@
 ##################################################################################################
 """
 import argparse
+from asyncio.log import logger
 import os
 import warnings
 
@@ -181,7 +182,8 @@ def main():
         dataset = build_dataset(cfg.data.test)
     else:
         raise NotImplementedError
-
+    logger.info("build the dataloader and checkpoints")
+    logger.info("build the dataloader and checkpoints")
     data_loader = build_dataloader(
         dataset,
         samples_per_gpu=samples_per_gpu,

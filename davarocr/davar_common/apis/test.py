@@ -10,6 +10,7 @@
 ##################################################################################################
 """
 from asyncio.log import logger
+from distutils.log import info
 from logging import Logger
 import os.path as osp
 from davarocr.mmcv import runner
@@ -48,10 +49,11 @@ def single_gpu_test(model,
     model.eval()
     results = []
     dataset = data_loader.dataset
-    runner.logger.info(f'ddataset:\n{dataset}')
-    logger.info(f'ddataset:\n{dataset}')
+    runner.logger.info(f'r.l.dataset:\n{dataset}')
+    logger.info(f'l.i.dataset:\n{dataset}')
     prog_bar = mmcv.ProgressBar(len(dataset))
     for _, data in enumerate(data_loader):
+        logger.info(f'loop over data_loader{data}')
         with torch.no_grad():
             result = model(return_loss=False, rescale=True, **data)
 
@@ -146,6 +148,8 @@ def multi_gpu_test(model,
     model.eval()
     results = []
     dataset = data_loader.dataset
+    logger,info(f"l.i.dataset in multi GPU test\n{dataset}")
+    logger.warning(f"l.w.dataset in multi GPU test\n{dataset}")
     rank, world_size = get_dist_info()
     if rank == 0:
         prog_bar = mmcv.ProgressBar(len(dataset))

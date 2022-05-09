@@ -118,6 +118,8 @@ def train_model(model,
 
     # fp16 setting
     fp16_cfg = cfg.get('fp16', None)
+    logger.warning(f'l.wa.check if fp16 is on or off:\n{fp16_cfg}')
+    logger.info(f'l.in.check if fp16 is on or off:\n{fp16_cfg}')
     if fp16_cfg is not None:
         optimizer_config = Fp16OptimizerHook(
             **cfg.optimizer_config, **fp16_cfg, distributed=distributed)

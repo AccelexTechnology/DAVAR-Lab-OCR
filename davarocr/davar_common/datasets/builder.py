@@ -10,6 +10,7 @@
 """
 from asyncio.log import logger
 import copy
+from distutils.log import info
 import platform
 from functools import partial
 import torch
@@ -87,6 +88,8 @@ def davar_build_dataloader(
     Returns:
         the training data loader
     """
+    logger.info("l.i.get inside davar_build_dataloader")
+    logger.warning("l.w.get inside davar_build_dataloader")
     rank, world_size = get_dist_info()
 
     if sampler_type is not None:
@@ -158,7 +161,8 @@ def davar_build_dataloader(
         worker_init_fn=init_fn,
         **kwargs
     )
-
+    logger.info("l.i.build dataloader")
+    logger.warning("l.w.build dataloader")
     return data_loader
 
 
@@ -220,6 +224,8 @@ def davar_build_dataset(cfg, default_args=None):
         build the dataset for training
 
     """
+    logger.info("l.i.davar_build_dataset")
+    logger.warning("l.w.davar_build_dataset")
     from mmdet.datasets.dataset_wrappers import (
         ConcatDataset,
         RepeatDataset,
@@ -285,6 +291,7 @@ def parameter_align(cfg):
     dataset_num = len(batch_ratios)
 
     for key, item in cfg["dataset"].items():
+        logger.info(f"return key and item\n{key}\n{item}")
         if (
             isinstance(item, list)
             and isinstance(item[0], list)
@@ -312,9 +319,11 @@ def parameter_align(cfg):
         else:
             raise TypeError("parameter type error")
 
-    for i in range(dataset_num):
+    for i in range(dataset_num):        
         temp_dict = dict()
         for key, item in cfg["dataset"].items():
+            logger.info(f"retuen the key and items from dataset{key}\n{item}")
+            logger.warning(f"retuen the key and items from dataset{key}\n{item}")
             temp_dict[key] = item[i]
         align_para.append(temp_dict)
 
@@ -353,8 +362,12 @@ def multi_frame_collate(batch):
 
         # pad each img and gt into max width and height
         for i in range(len(batch)):
+            logger.info("l.i.iterate over batches and show the iteration\n{i}")
+            logger.warning("l.i.iterate over batches and show the iteration\n{i}")
             for j in range(len(batch[i])):
                 img_meta.append(batch[i][j]["img_metas"].data)
+                logger.info("l.i.img_meta\n{img_meta}")
+                logger.warning("l.i.img_meta\n{img_meta}")
                 c, w, h = batch[i][j]["img"].data.size()
                 tmp_img = torch.zeros((c, max_w, max_h), dtype=torch.float)
                 tmp_img[:, 0:w, 0:h] = batch[i][j]["img"].data
@@ -370,6 +383,8 @@ def multi_frame_collate(batch):
         img = DC([torch.stack(img, dim=0)])
         gt_mask = DC([torch.stack(gt_mask, dim=0)])
         data["img_metas"] = DC([img_meta], cpu_only=True)
+        logger.info("l.i.img\n{img}")
+        logger.warning("l.i.img\n{img}")     
         data["img"] = img
         data["gt_masks"] = gt_mask
 

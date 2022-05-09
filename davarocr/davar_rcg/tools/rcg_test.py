@@ -170,6 +170,8 @@ def main():
                 test_filter=None,)
                 # getattr(cfg.data[t_index], 'Filter', None), )
             # build the test dataset
+            logger.warning("build the test dataset")
+            logger.info("build the test dataset")
             dataset = build_dataset(tset)
             data_loader = build_dataloader(
                 dataset,
@@ -177,7 +179,8 @@ def main():
                 workers_per_gpu=cfg.data.workers_per_gpu,
                 dist=distributed,
                 shuffle=False)
-
+            logger.warning("after build the test dataset")
+            logger.info("after build the test dataset")
             # load the test model
             if cfg.tmp_dict['Epochs'] not in total_result and cfg.tmp_dict['Epochs'] is not None:
                 total_result.append(cfg.tmp_dict['Epochs'])
@@ -249,6 +252,8 @@ def main():
                                 if not distributed:
                                     # single gpu test
                                     model = MMDataParallel(model, device_ids=[0])
+                                    logger.warning("single gpu test")
+                                    logger.info("single gpu test")
                                     outputs = single_gpu_test(model, data_loader,
                                                               args.show, model_type="RECOGNIZOR")
                                     runner.logger.info(f'single gpu test outputs:\n{outputs}')

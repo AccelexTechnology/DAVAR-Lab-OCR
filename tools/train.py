@@ -15,7 +15,6 @@ import os.path as osp
 import time
 import warnings
 import cv2
-from davarocr.mmcv import runner
 cv2.setNumThreads(0)
 
 import torch
@@ -225,8 +224,7 @@ def main():
         raise NotImplementedError
 
     datasets = [davar_build_dataset(cfg.data.train)]
-    logger.warning(f'main func datasets:\n{datasets}')
-    runner.logger.info(f'main func datasets:\n{datasets}')
+
     if len(cfg.workflow) == 2:
         val_dataset = copy.deepcopy(cfg.data.val)
         val_dataset.pipeline = cfg.data.train.pipeline

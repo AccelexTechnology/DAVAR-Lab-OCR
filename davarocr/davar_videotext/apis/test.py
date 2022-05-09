@@ -38,7 +38,7 @@ def single_gpu_test(model,
     runner.logger.info(f'r.single gpu test dataset:\{dataset}]')
     prog_bar = mmcv.ProgressBar(len(dataset))
     for i, data in enumerate(data_loader):
-        Logger.warning(f'L.loop in data_loader:\{i, data}]')
+        logger.warning(f'L.loop in data_loader:\{i, data}]')
         runner.logger.info(f'r.loop in data_loader:\{i, data}]')
         with torch.no_grad():
             result = model(return_loss=False, rescale=True, **data)
