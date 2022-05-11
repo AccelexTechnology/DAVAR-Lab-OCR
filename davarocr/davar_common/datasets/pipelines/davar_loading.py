@@ -11,6 +11,7 @@
 # Date           :    2020-05-31
 ##################################################################################################
 """
+from asyncio.log import logger
 import warnings
 import os.path as osp
 import mmcv
@@ -49,6 +50,8 @@ class DavarLoadImageFromFile():
         Returns:
             results(dict): Data flow used in DavarCustomDataset
         """
+        logger.info("start data flow used in DavarCustomDataset")
+        logger.warning("start data flow used in DavarCustomDataset")
         if self.decode_from_array:
             data_array = results['img_info']
             assert isinstance(data_array, np.ndarray)
@@ -81,6 +84,8 @@ class DavarLoadImageFromFile():
         results['img'] = img
         results['img_shape'] = img.shape
         results['ori_shape'] = img.shape
+        logger.info("finished data flow used in DavarCustomDataset")
+        logger.warning("finished data flow used in DavarCustomDataset")
         return results
 
     def __repr__(self):
@@ -244,6 +249,8 @@ class DavarLoadAnnotations():
         Returns:
             dict: updated data flow. results['cares'] will be updated.
         """
+        logger.info("start _load_cares")
+        logger.warning("start _load_cares")
         ann = results['ann_info']
 
         # If there is no 'bboxes' in annotations, the length is set to 1.
@@ -256,6 +263,8 @@ class DavarLoadAnnotations():
             cares = np.ones(bboxes_length)
 
         results["cares"] = cares
+        logger.info("finished _load_cares")
+        logger.warning("finished _load_cares")
         return results
 
     def _load_bboxes(self, results):
@@ -268,6 +277,8 @@ class DavarLoadAnnotations():
         Returns:
             dict: updated data flow. results['bboxes'] and results['bboxes_ignore'] will be updated.
         """
+        logger.info("start Load and parse results['bboxes']")
+        logger.warning("start Load and parse results['bboxes']")
         ann = results['ann_info']
         cares = results['cares']
 
@@ -306,6 +317,8 @@ class DavarLoadAnnotations():
 
         results['bbox_fields'].append('gt_bboxes')
         results['bbox_fields'].append('gt_bboxes_ignore')
+        logger.info("finished Load and parse results['bboxes']")
+        logger.warning("finished Load and parse results['bboxes']")
         return results
 
     def _load_poly_bboxes(self, results):
@@ -318,6 +331,8 @@ class DavarLoadAnnotations():
         Returns:
             dict: updated data flow. results['poly_bboxes'] and results['poly_bboxes_ignore'] will be updated.
         """
+        logger.info("strat _load_poly_bboxes']")
+        logger.warning("strat _load_poly_bboxes']")
         ann = results['ann_info']
         cares = results['cares']
         tmp_gt_bboxes = ann.get('bboxes', [])
@@ -345,6 +360,8 @@ class DavarLoadAnnotations():
 
         results['bbox_fields'].append('gt_poly_bboxes')
         results['bbox_fields'].append('gt_poly_bboxes_ignore')
+        logger.info("finished _load_poly_bboxes']")
+        logger.warning("finished _load_poly_bboxes']")
         return results
 
     def _poly2mask(self, mask_ann, img_h, img_w):
@@ -358,7 +375,8 @@ class DavarLoadAnnotations():
         Returns:
             np.ndarray: The decode bitmap mask of shape (img_h, img_w).
         """
-
+        logger.info("strat _poly2mask']")
+        logger.warning("strat _poly2mask']")
         if isinstance(mask_ann, list):
             # polygon -- a single object might consist of multiple parts
             # we merge all parts into one mask rle code
@@ -371,6 +389,8 @@ class DavarLoadAnnotations():
             # rle
             rle = mask_ann
         mask = maskUtils.decode(rle)
+        logger.info("finished _poly2mask']")
+        logger.warning("finished _poly2mask']")
         return mask
 
     def process_polygons(self, polygons):
@@ -382,12 +402,15 @@ class DavarLoadAnnotations():
         Returns:
             list[np.ndarray]: Processed polygons.
         """
-
+        logger.info("strat process_polygons']")
+        logger.warning("strat process_polygons']")
         polygons = [np.array(p) for p in polygons]
         valid_polygons = []
         for polygon in polygons:
             if len(polygon) % 2 == 0 and len(polygon) >= 6:
                 valid_polygons.append(polygon)
+        logger.info("finished process_polygons']")
+        logger.warning("finished process_polygons']")
         return valid_polygons
 
     def _load_polymasks(self, results):
@@ -400,7 +423,8 @@ class DavarLoadAnnotations():
             dict: The dict contains loaded mask annotations. If ``self.poly2mask`` is set ``True``,
                   `gt_mask` will contain:obj:`PolygonMasks`. Otherwise, :obj:`BitmapMasks` is used.
         """
-
+        logger.info("start _load_polymasks']")
+        logger.warning("start _load_polymasks']")
         height, width = results['img_info']['height'], results['img_info']['width']
 
         ann = results['ann_info']
@@ -422,6 +446,8 @@ class DavarLoadAnnotations():
                 [self.process_polygons(polygons) for polygons in valid_polygons], height, width)
         results['gt_masks'] = gt_masks
         results['mask_fields'].append('gt_masks')
+        logger.info("finished _load_polymasks']")
+        logger.warning("finished _load_polymasks']")
         return results
 
     def _load_labels(self, results):
@@ -435,6 +461,8 @@ class DavarLoadAnnotations():
         Returns:
             dict: updated data flow. results['gt_labels'] will be updated, in shape of [1, 2, 3, 2, 1, ...].
         """
+        logger.info("start _load_labels']")
+        logger.warning("start _load_labels']")
         ann = results['ann_info']
         cares = results['cares']
         tmp_labels = ann.get("labels", None)
@@ -515,6 +543,8 @@ class DavarLoadAnnotations():
         results['gt_labels'] = gt_labels
         results['gt_labels_ignore'] = gt_labels_ignore
         #print(results['gt_labels'])
+        logger.info("finished _load_labels']")
+        logger.warning("finished _load_labels']")
         return results
 
     def _load_multi_labels(self, results):
@@ -529,7 +559,8 @@ class DavarLoadAnnotations():
            dict: updated data flow. results['gt_labels'] will be updated,
                  in shape of [[1,2], [2,2], [3,1], [2,1], [1,1], ...].
         """
-
+        logger.info("start _load_multi_labels']")
+        logger.warning("start _load_multi_labels']")
         ann = results['ann_info']
         cares = results['cares']
 
@@ -621,7 +652,8 @@ class DavarLoadAnnotations():
 
         results['gt_labels'] = gt_labels
         results['gt_labels_ignore'] = gt_labels_ignore
-
+        logger.info("finished _load_multi_labels']")
+        logger.warning("finished _load_multi_labels']")
         return results
 
     def _load_cbboxes(self, results):
@@ -634,6 +666,8 @@ class DavarLoadAnnotations():
            dict: updated data flow. results['gt_cbboxes'] and results['gt_cbboxes_ignore'] will be updated,
                  in shape of 3-dimensional vectors [[[x1, y1, ..., x4, y4],[],[]], [[],[]] ...].
         """
+        logger.info("start _load_cbboxes']")
+        logger.warning("start _load_cbboxes']")
         ann = results['ann_info']
         cares = results['cares']
         tmp_cbboxes = ann.get('cbboxes', [])
@@ -649,7 +683,8 @@ class DavarLoadAnnotations():
         results['gt_cbboxes_ignore'] = tmp_gt_cbboxes_ignore
         results['cbbox_fields'].append('gt_cbboxes')
         results['cbbox_fields'].append('gt_cbboxes_ignore')
-
+        logger.info("finished _load_cbboxes']")
+        logger.warning("finished _load_cbboxes']")
         return results
 
     def _load_texts(self, results):
@@ -662,6 +697,8 @@ class DavarLoadAnnotations():
            dict: updated data flow. results['gt_texts'] (list[str]) and results['gt_text'] (str) will be updated,
 
         """
+        logger.info("start _load_texts']")
+        logger.warning("start _load_texts']")
         ann = results['ann_info']
         tmp_gt_texts = []
         tmp_texts = ann.get('texts', [])
@@ -694,7 +731,8 @@ class DavarLoadAnnotations():
         # string (using in text recognition task
         if len(results['gt_texts']) == 1:
             results['gt_text'] = tmp_gt_texts[0]
-
+        logger.info("finished _load_texts']")
+        logger.warning("finished _load_texts']")
         return results
 
     def _load_box_bieo_labels(self, results):
@@ -708,6 +746,8 @@ class DavarLoadAnnotations():
         Returns:
             dict: updated data flow. results['gt_labels'] will be updated, in shape of [1, 2, 3, 2, 1, ...].
         """
+        logger.info("start _load_box_bieo_labels']")
+        logger.warning("start _load_box_bieo_labels']")
         ann = results['ann_info']
         cares = results['cares']
         tmp_labels = ann.get("bbox_bieo_labels", None)
@@ -718,6 +758,8 @@ class DavarLoadAnnotations():
                 gt_labels.append(per_item+[self.padding_idx]*(self.max_length - len(per_item)))
 
         results['gt_bieo_labels'] = gt_labels
+        logger.info("finished _load_box_bieo_labels']")
+        logger.warning("finished _load_box_bieo_labels']")
         return results
 
     def __call__(self, results):
@@ -729,6 +771,8 @@ class DavarLoadAnnotations():
         Returns:
             dict: output data flow.
         """
+        logger.info("start __call__.Data flow used in DavarCustomDataset.']")
+        logger.warning("start __call__.Data flow used in DavarCustomDataset.']")
         assert 'ann_info' in results
         # Cares will be used for all tasks.
         results = self._load_cares(results)
@@ -750,7 +794,8 @@ class DavarLoadAnnotations():
             results = self._load_cbboxes(results)
         if self.bieo_labels is not None and self.with_box_bieo_labels:
             results = self._load_box_bieo_labels(results)
-
+        logger.info("finished __call__.Data flow used in DavarCustomDataset.']")
+        logger.warning("finished __call__.Data flow used in DavarCustomDataset.']")
         return results
 
     def __repr__(self):

@@ -9,6 +9,7 @@
 #####################################################################################################
 """
 from asyncio.log import logger
+from distutils.log import info
 from math import fabs, sin, cos, radians
 from unittest import runner
 import numpy as np
@@ -591,7 +592,7 @@ class ResizeNormalize:
             dict: dict with training image after resize and normalization
         """
         img = results['img']
-
+        logger,info(f"show the img inside __call__,ResizeNormalize\n{img}")
         # different interpolation type corresponding the OpenCV
         if self.interpolation == 0:
             self.interpolation = cv2.INTER_NEAREST
@@ -608,13 +609,17 @@ class ResizeNormalize:
         if img is None:
             return None
         try:
+            logger.info("get inside the try to resize the image")
             img = cv2.resize(img, self.size, self.interpolation)
+            logger.info("seems its done with resizing")
         except cv2.error:
+            logger.info("can not do the resize and get inside the except")
             return None
         img = np.array(img, np.float32)
 
         # normalize the image
         img = mmcv.imnormalize(img, self.mean, self.std, to_rgb=False)
+        logger.info(f"here is the normalize image\n{img}")
         results['img'] = img
         return results
 
@@ -637,6 +642,7 @@ class DavarRandomCrop:
         self.instance_key = instance_key
 
     def _random_crop(self, img, polys):
+        logger.info("start random crop")
         """ Randomly crop image
 
         Args:
@@ -687,6 +693,7 @@ class DavarRandomCrop:
                 if np.all((poly[0::2] >= x_min) & (poly[1::2] >= y_min) & \
                           (poly[0::2] <= x_max) & (poly[1::2] <= y_max)):
                    return x_min, y_min, x_max, y_max
+        logger.info("finished random crop")
         return 0, 0, w, h
 
     def __call__(self, results):
@@ -698,6 +705,7 @@ class DavarRandomCrop:
         Returns:
             dict: updated data flow.
         """
+        logger.info("strat main crprocess of davar_random_cropop")
         img = results['img']
         polys = results[self.instance_key]
         x_min, y_min, x_max, y_max = self._random_crop(img, polys)
@@ -746,6 +754,7 @@ class DavarRandomCrop:
                 else:
                     kept_mask = np.empty((0, results[key].height, results[key].width), dtype=np.float32)
                 results[key] = BitmapMasks(kept_mask, results[key].height, results[key].width)
+        logger.info("finished main crprocess of davar_random_cropop")
         return results
 
     def __repr__(self):
