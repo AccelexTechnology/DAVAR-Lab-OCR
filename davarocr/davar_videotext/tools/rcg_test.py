@@ -9,6 +9,7 @@
 ##################################################################################################
 """
 
+from asyncio.log import logger
 import os
 import sys
 import argparse
@@ -148,6 +149,7 @@ def main():
 
         # Build the test dataset
         dataset = build_dataset(tset)
+        logger.info(f'build the test dataset\n{dataset}')
         data_loader = build_dataloader(
             dataset,
             samples_per_gpu=cfg.data.samples_per_gpu if "samples_per_gpu" in cfg.data else cfg.data.imgs_per_gpu,

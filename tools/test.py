@@ -183,7 +183,6 @@ def main():
     else:
         raise NotImplementedError
     logger.info("build the dataloader and checkpoints")
-    logger.info("build the dataloader and checkpoints")
     data_loader = build_dataloader(
         dataset,
         samples_per_gpu=samples_per_gpu,

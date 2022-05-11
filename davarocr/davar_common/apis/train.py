@@ -43,11 +43,9 @@ def train_model(model,
         meta(dict): prepared meta information for runner.
     """
     logger = get_root_logger(cfg.log_level)
-    logger.warning(f'l.wa.log level\n{logger}')
-    logger.info(f'l.in.log level\n{logger}')
     # prepare data loaders
     dataset = dataset if isinstance(dataset, (list, tuple)) else [dataset]
-    logger.info(f'l.prepare data loaders\n{dataset}')
+    logger.info(f'prepare data loaders\n{dataset}')
     if 'imgs_per_gpu' in cfg.data:
         logger.warning('imgs_per_gpu is deprecated in MMDet V2.0. '
                        'Please use "samples_per_gpu" instead')
@@ -61,7 +59,6 @@ def train_model(model,
                 'Automatically set "samples_per_gpu"="imgs_per_gpu"='
                 '{} in this experiments'.format(cfg.data.imgs_per_gpu))
         cfg.data.samples_per_gpu = cfg.data.imgs_per_gpu
-        logger.warning(f'l.w.data samples per gpu\n{cfg.data.samples_per_gpu}')
     cfg_sampler = cfg.data.get("sampler", None)
     data_loaders = [
         davar_build_dataloader(
@@ -72,8 +69,6 @@ def train_model(model,
             len(cfg.gpu_ids),  # cfg.gpus will be ignored if distributed
             dist=distributed,
             seed=cfg.seed) for ds in dataset]
-    logger.warning(f'l.wa.data loaders:\n{data_loaders}')
-    logger.info(f'l.in.data loaders:\n{data_loaders}')
     # put model on gpus
     if distributed:
         find_unused_parameters = cfg.get('find_unused_parameters', False)
@@ -117,9 +112,7 @@ def train_model(model,
     runner.timestamp = timestamp
 
     # fp16 setting
-    fp16_cfg = cfg.get('fp16', None)
-    logger.warning(f'l.wa.check if fp16 is on or off:\n{fp16_cfg}')
-    logger.info(f'l.in.check if fp16 is on or off:\n{fp16_cfg}')
+    fp16_cfg = cfg.get('fp16', None)    
     if fp16_cfg is not None:
         optimizer_config = Fp16OptimizerHook(
             **cfg.optimizer_config, **fp16_cfg, distributed=distributed)
@@ -127,7 +120,7 @@ def train_model(model,
         optimizer_config = OptimizerHook(**cfg.optimizer_config)
     else:
         optimizer_config = cfg.optimizer_config
-
+    logger.info(f'fp16 setting, optimizer config:\n{optimizer_config}')
     # register hooks
     runner.register_training_hooks(cfg.lr_config, optimizer_config,
                                    cfg.checkpoint_config, cfg.log_config,

@@ -10,7 +10,6 @@
 ##################################################################################################
 """
 from asyncio.log import logger
-from logging import Logger
 from davarocr.mmcv import runner
 import warnings
 from davarocr.mmcv import runner
@@ -49,7 +48,6 @@ def init_model(
     Returns:
         nn.Module: The constructed detector.
     """
-    logger.info(f"l.i.inference module")
     if isinstance(config, str):
         config = mmcv.Config.fromfile(config)
     elif not isinstance(config, mmcv.Config):
@@ -154,7 +152,6 @@ def inference_model(model, imgs):
             data = test_pipeline(data)
             batch_data.append(data)
             logger.info(f'batch data:\n{batch_data}')
-            runner.logger.info(f'batch data:\n{batch_data}')
         data_collate = collate(batch_data, samples_per_gpu=len(batch_data))
         data = scatter(data_collate, [gpu_device_num])[0]
 

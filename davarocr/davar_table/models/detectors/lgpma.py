@@ -103,7 +103,7 @@ class LGPMA(TwoStageDetector):
         Returns:
             dict[str, Tensor]: a dictionary of loss components
         """
-        logger.warning("forward train function is triggered")
+        logger.warning("forward train function")
         logger.warning(f'{img_metas}')
         
         x = self.extract_feat(img)
@@ -120,6 +120,7 @@ class LGPMA(TwoStageDetector):
                 gt_labels=None,
                 gt_bboxes_ignore=gt_bboxes_ignore,
                 proposal_cfg=proposal_cfg)
+            logger.info(f"rpn losses\n{rpn_losses}")
             losses.update(rpn_losses)
         else:
             proposal_list = proposals
@@ -134,15 +135,15 @@ class LGPMA(TwoStageDetector):
             print(err_str)
             raise ValueError(err_str)
 
-        # try:
-        #     if torch.any(torch.isnan(x)):
-        #         err_str = f"The value is nan\n{x}\n{img_metas}"
-        #         raise ValueError (err_str)
-        # except:
-        #     pass
+        try:
+            if torch.any(torch.isnan(x)):
+                err_str = f"The value is nan\n{x}\n{img_metas}"
+                logger.info(err_str)
+        except:
+            pass
         
 
-        logger.info(f"roi_losses\n{roi_losses}")
+        logger.info(f"roi losses\n{roi_losses}")
         losses.update(roi_losses)
 
         # global forward and loss

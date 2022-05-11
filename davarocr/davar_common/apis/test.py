@@ -49,8 +49,7 @@ def single_gpu_test(model,
     model.eval()
     results = []
     dataset = data_loader.dataset
-    runner.logger.info(f'r.l.dataset:\n{dataset}')
-    logger.info(f'l.i.dataset:\n{dataset}')
+    logger.info(f'print dataset:\n{dataset}')
     prog_bar = mmcv.ProgressBar(len(dataset))
     for _, data in enumerate(data_loader):
         logger.info(f'loop over data_loader{data}')
@@ -67,7 +66,6 @@ def single_gpu_test(model,
                 else:
                     img_tensor = data['img'][0].data[0]
                 img_metas = data['img_metas'][0].data[0]
-                runner.logger.info(f'img metas when model type is DETECTOR :\n{img_metas}')
                 logger.info(f'l.img metas when model type is DETECTOR:\n{img_metas}')
                 imgs = tensor2imgs(img_tensor, **img_metas[0]['img_norm_cfg'])
                 assert len(imgs) == len(img_metas)
@@ -148,8 +146,7 @@ def multi_gpu_test(model,
     model.eval()
     results = []
     dataset = data_loader.dataset
-    logger,info(f"l.i.dataset in multi GPU test\n{dataset}")
-    logger.warning(f"l.w.dataset in multi GPU test\n{dataset}")
+    logger,info(f"dataset in multi GPU test\n{dataset}")
     rank, world_size = get_dist_info()
     if rank == 0:
         prog_bar = mmcv.ProgressBar(len(dataset))
