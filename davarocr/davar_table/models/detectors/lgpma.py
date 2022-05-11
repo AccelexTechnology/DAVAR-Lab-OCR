@@ -15,7 +15,7 @@ from mmdet.models.builder import DETECTORS
 from mmdet.models.detectors.two_stage import TwoStageDetector
 from davarocr.davar_common.core import build_postprocess
 from torch import nn
-
+import gc
 
 @DETECTORS.register_module()
 class LGPMA(TwoStageDetector):
@@ -108,7 +108,8 @@ class LGPMA(TwoStageDetector):
         
         x = self.extract_feat(img)
         losses = dict()
-
+        del img
+        gc.collect()
         # RPN forward and loss
         if self.with_rpn:
             proposal_cfg = self.train_cfg.get('rpn_proposal',
