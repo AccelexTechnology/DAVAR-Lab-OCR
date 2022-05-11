@@ -49,6 +49,7 @@ def init_model(
     Returns:
         nn.Module: The constructed detector.
     """
+    logger.info(f"l.i.inference module")
     if isinstance(config, str):
         config = mmcv.Config.fromfile(config)
     elif not isinstance(config, mmcv.Config):

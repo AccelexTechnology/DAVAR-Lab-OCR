@@ -8,7 +8,9 @@
 # Date           :    2020-11-25
 #####################################################################################################
 """
+from asyncio.log import logger
 from math import fabs, sin, cos, radians
+from unittest import runner
 import numpy as np
 import cv2
 import mmcv
@@ -118,6 +120,8 @@ class DavarResize(Resize):
         Returns:
             dict: updated data flow.
         """
+        logger.info(f"l.i.show the result in __call__\n{results}")
+        logger.warning(f"l.w.show the result in __call__\n{results}")
         if 'scale' not in results:
             if 'scale_factor' in results:
                 img_shape = results['img'].shape[:2]

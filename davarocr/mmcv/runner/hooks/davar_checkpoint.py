@@ -8,6 +8,7 @@
 # Date           :    2021-05-20
 ##################################################################################################
 """
+from logging import Logger
 import os
 import torch
 
@@ -58,7 +59,7 @@ class DavarCheckpointHook(CheckpointHook):
             sync_buffer (bool): Whether to synchronize buffers in different gpus
             **kwargs (None): backup parameter
         """
-
+        Logger.info("DavarCheckpointHook")
         super().__init__(interval, by_epoch, save_optimizer, out_dir, max_keep_ckpts, save_last, sync_buffer, **kwargs)
 
         self.iter_interval = iter_interval

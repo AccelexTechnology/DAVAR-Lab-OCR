@@ -103,6 +103,7 @@ class LGPMA(TwoStageDetector):
         Returns:
             dict[str, Tensor]: a dictionary of loss components
         """
+        logger.warning("forward train function is triggered")
         logger.warning(f'{img_metas}')
         
         x = self.extract_feat(img)
@@ -141,7 +142,7 @@ class LGPMA(TwoStageDetector):
         #     pass
         
 
-
+        logger.info(f"roi_losses\n{roi_losses}")
         losses.update(roi_losses)
 
         # global forward and loss
