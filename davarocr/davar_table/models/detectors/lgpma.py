@@ -15,7 +15,7 @@ from mmdet.models.builder import DETECTORS
 from mmdet.models.detectors.two_stage import TwoStageDetector
 from davarocr.davar_common.core import build_postprocess
 from torch import nn
-import gc
+import sys
 
 @DETECTORS.register_module()
 class LGPMA(TwoStageDetector):
@@ -108,8 +108,7 @@ class LGPMA(TwoStageDetector):
         
         x = self.extract_feat(img)
         losses = dict()
-        del img
-        gc.collect()
+
         # RPN forward and loss
         if self.with_rpn:
             proposal_cfg = self.train_cfg.get('rpn_proposal',
@@ -136,15 +135,15 @@ class LGPMA(TwoStageDetector):
             print(err_str)
             raise ValueError(err_str)
 
-        try:
-            if torch.any(torch.isnan(x)):
-                err_str = f"The value is nan\n{x}\n{img_metas}"
-                logger.info(err_str)
-        except:
-            pass
+        # try:
+        #     if torch.any(torch.isnan(x)):
+        #         err_str = f"The value is nan\n{x}\n{img_metas}"
+        #         logger.info(err_str)
+        # except:
+        #     pass
         
 
-        logger.info(f"roi losses\n{roi_losses}")
+        
         losses.update(roi_losses)
 
         # global forward and loss
@@ -156,6 +155,8 @@ class LGPMA(TwoStageDetector):
             loss_global_seg = self.global_seg_head.loss(seg_pred, seg_targets)
             losses.update(loss_global_seg)
 
+        logger.info(f"losses\n{losses}")
+        logger.info(f'getsize of losses\n{sys,sys.getsizeof(losses)}')
         return losses
 
     def simple_test(self, img, img_metas, proposals=None, rescale=False):
