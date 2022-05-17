@@ -9,6 +9,8 @@
 ######################################################################################################
 """
 
+from asyncio.log import logger
+import sys
 import torch
 from torch import nn
 
@@ -344,7 +346,8 @@ class VSR(BaseDetector):
                                                      gt_bboxes_ignore, gt_masks,
                                                      **kwargs)
         losses.update(roi_losses)
-
+        logger.info(f"losses vsr\n{losses}")
+        logger.info(f'getsize of losses\n{sys.getsizeof(losses)}')
         return losses
 
     def simple_test(self,

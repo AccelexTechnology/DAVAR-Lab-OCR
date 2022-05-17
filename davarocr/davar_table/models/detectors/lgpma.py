@@ -156,7 +156,7 @@ class LGPMA(TwoStageDetector):
             losses.update(loss_global_seg)
 
         logger.info(f"losses\n{losses}")
-        logger.info(f'getsize of losses\n{sys,sys.getsizeof(losses)}')
+        logger.info(f'getsize of losses\n{sys.getsizeof(losses)}')
         return losses
 
     def simple_test(self, img, img_metas, proposals=None, rescale=False):

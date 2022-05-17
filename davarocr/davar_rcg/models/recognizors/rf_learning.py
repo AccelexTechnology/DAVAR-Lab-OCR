@@ -8,6 +8,8 @@
 # Date           :    2021-05-01
 ##################################################################################################
 """
+from logging import Logger
+import sys
 from mmdet.models import builder
 
 from davarocr.davar_common.models.builder import build_connect
@@ -255,7 +257,8 @@ class RFLRecognizor(BaseRecognizor):
         else:
             losses.update(loss_count)
             losses.update(loss_recog)
-
+        Logger.info(f"losses rf_learning\n{losses}")
+        Logger.info(f'getsize of losses\n{sys.getsizeof(losses)}')
         return losses
 
     def simple_test(self,

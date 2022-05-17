@@ -8,6 +8,8 @@
 # Date           :    2021-05-20
 ######################################################################################################
 """
+from asyncio.log import logger
+import sys
 import numpy as np
 
 import torch
@@ -298,7 +300,8 @@ class TRIE(TwoStageEndToEnd):
             target[target.eq(255)] = 0
             crf_loss = self.infor_ner_head.loss(outputs, target, mask)
             losses.update(crf_loss)
-
+        logger.info(f"losses trie\n{losses}")
+        logger.info(f'getsize of losses\n{sys.getsizeof(losses)}')
         return losses
 
     def simple_test(self,

@@ -8,6 +8,8 @@
 # Date           :    2021-03-19
 ##################################################################################################
 """
+from logging import Logger
+import sys
 import numpy as np
 
 import torch
@@ -238,7 +240,8 @@ class TRIEGT(TRIE):
             target[target.eq(255)] = 0
             crf_loss = self.infor_ner_head.loss(outputs, target, mask)
             losses.update(crf_loss)
-
+        Logger.info(f"losses trie_gt\n{losses}")
+        Logger.info(f'getsize of losses\n{sys.getsizeof(losses)}')
         return losses
 
     def simple_test(self,
