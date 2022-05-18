@@ -78,13 +78,7 @@ model = dict(
                 type='CrossEntropyLoss', use_mask=True, loss_weight=1.0),
             loss_lpma=dict(
                 type='L1Loss', loss_weight=1.0))),
-    global_seg_head=dict(
-        type='GPMAMaskHead',
-        in_channels=256,
-        conv_out_channels=256,
-        num_classes=1,
-        loss_mask=dict(type='DiceLoss', loss_weight=1),
-        loss_reg=dict(type='SmoothL1Loss', beta=0.1, loss_weight=0.01, reduction='sum')),
+    global_seg_head=None,
     # model training and testing settings
     train_cfg=dict(
         rpn=dict(

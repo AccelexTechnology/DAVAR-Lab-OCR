@@ -8,6 +8,8 @@
 # Date           :    2021-12-13
 ######################################################################################################
 """
+from logging import Logger
+import sys
 import torch
 
 from mmdet.core import bbox2result, bbox2roi
@@ -79,7 +81,8 @@ class StandardRoIHeadWGCN(StandardRoIHead):
                                                     bbox_results['bbox_feats'],
                                                     gt_masks, img_metas)
             losses.update(mask_results['loss_mask'])
-
+        Logger.info(f"losses standard_roi_head_w_\n{losses}")
+        Logger.info(f'getsize of losses\n{sys.getsizeof(losses)}')
         return losses
 
     def _bbox_forward(self, x, rois, img_metas=None):

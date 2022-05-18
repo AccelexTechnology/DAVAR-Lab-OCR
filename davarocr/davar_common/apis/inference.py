@@ -127,9 +127,10 @@ def inference_model(model, imgs):
         gpu_device_num = -1
     else:
         gpu_device_num = int(str(device).split(":")[-1])
+    logger.info(f'gpu_device_num{gpu_device_num}')
     # Build the data pipeline
     test_pipeline = Compose(cfg.data.test.pipeline)
-
+    logger.info(f'Compose')
     # Prepare data
     if isinstance(imgs, dict):
         data = imgs
