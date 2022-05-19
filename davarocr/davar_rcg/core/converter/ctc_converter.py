@@ -10,6 +10,7 @@
                       for the CTCLabelConverter.
 ##################################################################################################
 """
+from asyncio.log import logger
 import json
 import os.path as osp
 import math
@@ -94,6 +95,7 @@ class CTCLabelConverter:
         self.max_index = len(self.character) - 1
 
         print("recognition dictionary %s \t" % str(self.dict).encode(encoding="utf-8").decode(encoding="utf-8"))
+        logger.info("recognition dictionary %s \t" % str(self.dict).encode(encoding="utf-8").decode(encoding="utf-8"))
 
     def encode(self, text):
         """

@@ -9,6 +9,9 @@
 ##################################################################################################
 """
 # encoding=utf-8
+from asyncio.log import logger
+
+
 _base_ = [
 ]
 
@@ -180,6 +183,7 @@ train_pipelines = [
 ]
 
 print('train_piplines:', train_pipelines)
+logger.info('train_piplines:', train_pipelines)
 
 val_pipeline = [
     dict(type=ppld['File'],

@@ -8,6 +8,7 @@
 # Date           :    2021-04-30
 ##################################################################################################
 """
+from asyncio.log import logger
 import os.path as osp
 import json
 
@@ -91,7 +92,7 @@ class RFLLabelConverter:
             raise Exception("dictionary file only support the txt and json file !!!")
 
         print("recognition dictionary %s \t" % str(self.dict).encode(encoding="utf-8").decode(encoding="utf-8"))
-
+        logger.info("recognition dictionary %s \t" % str(self.dict).encode(encoding="utf-8").decode(encoding="utf-8"))
     def encode(self, text):
         """
             convert text-label into text-index.

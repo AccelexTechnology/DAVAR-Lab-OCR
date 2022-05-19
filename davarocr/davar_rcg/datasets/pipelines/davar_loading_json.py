@@ -8,6 +8,7 @@
 # Date           :    2021-05-01
 ##################################################################################################
 """
+from asyncio.log import logger
 import re
 import os.path as osp
 
@@ -109,6 +110,7 @@ def rcg_json_dataload(load_type,
 
     if not isinstance(img, np.ndarray):
         print('Read Error at Path:', filename)
+        logger.info('Read Error at Path:', filename)
         return None
 
     if load_type == "File":
@@ -144,6 +146,7 @@ def rcg_json_dataload(load_type,
 
         if not isinstance(img, np.ndarray):
             print('Read Error at Path:', filename)
+            logger.info('Read Error at Path:', filename)
             return None
         if crop_pixel_shake is not None:
             img = shake_crop(img, bbox, **crop_pixel_shake)
@@ -172,6 +175,7 @@ def rcg_json_dataload(load_type,
 
         if label == '':
             print('Tight Empty Label:', filename)
+            logger.info('Tight Empty Label:', filename)
             return None
 
     results['img'] = img

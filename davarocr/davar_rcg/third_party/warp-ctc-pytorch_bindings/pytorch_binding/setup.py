@@ -1,3 +1,4 @@
+from asyncio.log import logger
 import os
 import platform
 import sys
@@ -20,6 +21,9 @@ if not os.path.exists(os.path.join(warp_ctc_path, "libwarpctc" + lib_ext)):
     print(("Could not find libwarpctc.so in {}.\n"
            "Build warp-ctc and set WARP_CTC_PATH to the location of"
            " libwarpctc.so (default is '../build')").format(warp_ctc_path))
+    logger.info(("Could not find libwarpctc.so in {}.\n"
+           "Build warp-ctc and set WARP_CTC_PATH to the location of"
+           " libwarpctc.so (default is '../build')").format(warp_ctc_path))
     sys.exit(1)
 
 include_dirs = [os.path.realpath('../include')]
@@ -28,6 +32,7 @@ if torch.cuda.is_available() or "CUDA_HOME" in os.environ:
     enable_gpu = True
 else:
     print("Torch was not built with CUDA support, not building warp-ctc GPU extensions.")
+    logger.info("Torch was not built with CUDA support, not building warp-ctc GPU extensions.")
     enable_gpu = False
 
 if enable_gpu:

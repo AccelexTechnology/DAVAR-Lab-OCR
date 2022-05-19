@@ -11,6 +11,7 @@
 # Date           :    2020-05-31
 ##################################################################################################
 """
+from asyncio.log import logger
 import warnings
 import os.path as osp
 import mmcv
@@ -75,6 +76,7 @@ class DavarLoadImageFromFile():
 
         if not isinstance(img, np.ndarray):
             print("Reading Error at {}".format(filename))
+            logger.info("Reading Error at {}".format(filename))
             return None
 
         if self.to_float32:
@@ -205,6 +207,7 @@ class DavarLoadAnnotations():
                 # If the characters are listed in a file
                 if osp.exists(self.text_profile['character']):
                     print("loading characters from file: %s" % self.text_profile['character'])
+                    logger.info("loading characters from file: %s" % self.text_profile['character'])
                     with open(self.text_profile['character'], 'r', encoding='utf8') as character_file:
                         characters = character_file.readline().strip().split(' ')
                         self.character = ''.join(characters)

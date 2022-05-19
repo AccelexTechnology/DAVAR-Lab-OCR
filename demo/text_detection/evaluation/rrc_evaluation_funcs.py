@@ -1,4 +1,5 @@
 # coding=utf-8
+from asyncio.log import logger
 import json
 import sys
 sys.path.append('./')
@@ -323,5 +324,6 @@ def main_validation(default_evaluation_params_fn,validate_data_fn):
 
     validate_data_fn(p['g'], p['s'], evalParams)
     print('SUCCESS')
+    logger.info('SUCCESS')
     sys.exit(0)
 

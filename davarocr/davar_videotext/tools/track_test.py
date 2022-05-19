@@ -10,6 +10,7 @@
 """
 
 
+from asyncio.log import logger
 import os
 import json
 import argparse
@@ -58,6 +59,7 @@ if __name__ == '__main__':
     model_path = cfg.ckpts[0]['ModelPath']
     if not os.path.exists(model_path):
         print(model_path + ' not exist.')
+        logger.info(model_path + ' not exist.')
 
     config_cfg = mmcv.Config.fromfile(cfg.ckpts[0]['ConfigPath'])
     test_cfg = config_cfg.test_cfg
@@ -115,6 +117,7 @@ if __name__ == '__main__':
 
     for video, value in det_data.items():
         print('processing video: ' + str(video))
+        logger.info('processing video: ' + str(video))
         frame_nums = len(value.keys())
 
         # history data to match current data
@@ -130,6 +133,7 @@ if __name__ == '__main__':
         # the frame id in video should start from "1" and should be consecutive by default
         for frame_id in range(1, frame_nums + 1):
             print("processing frame :", frame_id)
+            logger.info("processing frame :", frame_id)
             key = video + '/' + str(frame_id) + '.jpg'
             img_info = value[key]
 

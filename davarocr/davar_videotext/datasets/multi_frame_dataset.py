@@ -8,6 +8,7 @@
 # Date           :    2021-05-20
 ##################################################################################################
 """
+from asyncio.log import logger
 import os
 import os.path as osp
 import random
@@ -107,6 +108,7 @@ class MultiFrameDataset(DavarCustomDataset):
             self.indices = self.prepare_index(self.data_infos)
 
         print('len(self.data_infos)', len(self.data_infos))
+        logger.info('len(self.data_infos)', len(self.data_infos))
 
         # Processing pipeline
         self.pipeline = Compose(pipeline)

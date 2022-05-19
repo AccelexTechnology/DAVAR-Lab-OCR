@@ -8,6 +8,7 @@
 # Date           :    2021-04-30
 ##################################################################################################
 """
+from logging import Logger
 import os.path as osp
 import json
 
@@ -95,6 +96,7 @@ class BertLabelConverter:
         self.max_index = len(self.character) - 1
 
         print("recognition dictionary %s \t" % str(self.dict).encode(encoding="utf-8").decode(encoding="utf-8"))
+        Logger.info("recognition dictionary %s \t" % str(self.dict).encode(encoding="utf-8").decode(encoding="utf-8"))
 
     def encode(self, text, batch_max_length=25):
         """

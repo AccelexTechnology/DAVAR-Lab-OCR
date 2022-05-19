@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from asyncio.log import logger
 import os
 import json
 import time
@@ -64,6 +65,7 @@ def MOT(track_dict, gt_dict, voca_dict, care_rcg):
         premapping = {}
 
         print('processing ' + video_name)
+        logger.info('processing ' + video_name)
 
         # Loading vocabulary, If no vocabulary, the list will be empty
         if voca_res is not None:
@@ -297,6 +299,8 @@ def MOT(track_dict, gt_dict, voca_dict, care_rcg):
 
         print(str(video_name)+' MOTP: '+str(MOTP))
         print(str(video_name) + ' MOTA: ' + str(MOTA)+'\n\n')
+        logger.info(str(video_name)+' MOTP: '+str(MOTP))
+        logger.info(str(video_name) + ' MOTA: ' + str(MOTA)+'\n\n')
         TOTAL_MOTP = TOTAL_MOTP + MOTP
         TOTAL_MOTA = TOTAL_MOTA + MOTA
 
@@ -311,7 +315,8 @@ def MOT(track_dict, gt_dict, voca_dict, care_rcg):
     print('avg all frames MOTP: ' + str(TOTAL_MOTP))
     print('avg all frames MOTA: ' + str(TOTAL_MOTA))
     print("************************************************************************************************\n")
-
+    logger.info('avg all frames MOTP: ' + str(TOTAL_MOTP))
+    logger.info('avg all frames MOTA: ' + str(TOTAL_MOTA))
 
 if __name__ == '__main__':
 
@@ -339,3 +344,4 @@ if __name__ == '__main__':
     end_time = time.time()
     
     print('Running time: %s Seconds' % (end_time - start_time))
+    logger.info('Running time: %s Seconds' % (end_time - start_time))

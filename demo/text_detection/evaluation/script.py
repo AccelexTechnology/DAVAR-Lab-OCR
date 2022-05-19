@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from asyncio.log import logger
 from collections import namedtuple
 import rrc_evaluation_funcs
 import importlib
@@ -200,6 +201,7 @@ def evaluate_method(gtFilePath, submFilePath, evaluationParams):
             return (get_intersection(pD, pG) * funcOt(Ot * 1.0 / pD.area())) / get_union(pD, pG);
         except Exception as e:
             # print(e)
+            logger.info(f'exception error\n{e}')
             return 0
 
     def get_intersection(pD, pG):
@@ -473,6 +475,7 @@ def evaluate_method(gtFilePath, submFilePath, evaluationParams):
         AP = compute_ap(arrGlobalConfidences, arrGlobalMatches, numGlobalCareGt)
 
     print('num_gt, num_det: ', numGlobalCareGt, totalNumDetPols)
+    logger.info('num_gt, num_det: ', numGlobalCareGt, totalNumDetPols)
     methodRecall = 0 if numGlobalCareGt == 0 else float(matchedSum) / numGlobalCareGt
     methodPrecision = 0 if numGlobalCareDet == 0 else float(matchedSum) / numGlobalCareDet
     methodHmean = 0 if methodRecall + methodPrecision == 0 else 2 * methodRecall * methodPrecision / (
@@ -495,6 +498,9 @@ def evaluate_method(gtFilePath, submFilePath, evaluationParams):
     # print('matchedSum: ', matchedSum, 'matchedSum_cutGt: ', matchedSum_cutGt, 'cut_Rate: ', round(matchedSum_cutGt*1.0/matchedSum, 3), 'matchedSum_coverOtherGt: ', matchedSum_coverOtherGt, 'cover_Outlier_Rate: ', round(matchedSum_coverOtherGt*1.0/matchedSum, 3))
     print('Origin:')
     print("recall: ", round(methodRecall, 4), "precision: ", round(methodPrecision, 4), "hmean: ",
+          round(methodHmean, 4))
+    logger.info('Origin:')
+    logger.info("recall: ", round(methodRecall, 4), "precision: ", round(methodPrecision, 4), "hmean: ",
           round(methodHmean, 4))
     # print('SIoU-metric:')
     # print("iouRecall:", round(methodRecall_iou,3), "iouPrecision:", round(methodPrecision_iou,3), "iouHmean:", round(iouMethodHmean,3))

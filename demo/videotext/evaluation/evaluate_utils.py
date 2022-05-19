@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from asyncio.log import logger
 import os
 import argparse
 
@@ -424,6 +425,7 @@ def load_gt_fscore(gt_dict, voca_list):
 
         if gt_seq_ind in gt_matched_dict.keys():
             print('gt seq id not unique, there exists two seq has same id')
+            logger.info('gt seq id not unique, there exists two seq has same id')
 
         gt_matched_dict[gt_seq_ind] = 0
         if trans not in label_index_dict.keys():

@@ -8,6 +8,7 @@
 # Date           :    2021-05-01
 ##################################################################################################
 """
+from asyncio.log import logger
 import os
 import json
 import codecs
@@ -175,6 +176,8 @@ def compare_json(file_pre, compare_path, compare_list, res_json_list,
     width, height = img_size
     print(compare_list)
     print(res_json_list)
+    logger.info(f'compare_list\n{compare_list}')
+    logger.info(f'res_json_list\n{res_json_list}')
 
     name1, epoch1, nick1 = compare_list[0]
     name2, epoch2, nick2 = compare_list[1]
@@ -200,6 +203,7 @@ def compare_json(file_pre, compare_path, compare_list, res_json_list,
     if file_type in ["Tight", "File"]:
         for k, value1 in dict1.items():
             print(f'{k}_compare_start')  # image_name
+            logger.info(f'{k}_compare_start')
             pil_img = Image.open(os.path.join(file_pre, k))
             img_name = k.split('/')[-1]
             value2 = dict2[k]
@@ -305,6 +309,7 @@ def vis_json(file_pre, jin,
         input_dict = json.load(res_in)
 
     print('Vis...')
+    logger.info('Vis...')
     for k, value in input_dict.items():
         max_editdis = 0
         img_name = k.split('/')[-1]
@@ -420,6 +425,7 @@ def eval_json(jin, jout, batch_max_length=30):
     return_flag = False
 
     print('Evaluating...')
+    logger.info('Evaluating...')
     prog_bar = mmcv.ProgressBar(len(input_dict.keys()))
     for _, value in input_dict.items():
         for res in value:
@@ -447,6 +453,7 @@ def eval_json(jin, jout, batch_max_length=30):
                     all_ed['TOTAL_HIT'] += edit['hit']
                 else:
                     print(res, '#')
+                    logger.info(res, '#')
                     all_ed['NOT_CARE_NUM'] += 1
 
             if isinstance(result, int):
@@ -480,6 +487,7 @@ def eval_json(jin, jout, batch_max_length=30):
         json.dump(all_ed, file, ensure_ascii=False, sort_keys=True, indent=2)
 
     print('\nEval Finished!')
+    logger.info('\nEval Finished!')
     if not return_flag:
         return all_ed['WORD_ACC'] * 100.0
 
@@ -511,6 +519,7 @@ def results2json(dataset, results,
                                                                                            len(results))
     result_files = dict()
     print('Dumping results to json...')
+    logger.info('Dumping results to json...')
 
     if isinstance(results[0], tuple):
         pred_results, pred_befores = results
@@ -591,6 +600,7 @@ def show_result_table(dataset_name, rec_result):
         table.add_row([str(Decimal(item).quantize(Decimal("0.00"))) if isinstance(item, float)
                        else item for item in rec_result])
     print(table)
+    logger.info(f'table\n{table}')
 
 
 def filter_punctuation(sentence, punctuation):

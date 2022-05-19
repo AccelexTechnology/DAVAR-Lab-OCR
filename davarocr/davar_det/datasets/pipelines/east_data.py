@@ -8,6 +8,7 @@
 # Date           :    2021-06-08
 ##################################################################################################
 """
+from asyncio.log import logger
 import os
 import math
 from ctypes import c_int, c_float
@@ -135,6 +136,7 @@ class EASTDataGeneration:
             invalid = False
             if len(box) != 8:
                 print("invalid annotation {}".format(box))
+                logger.info("invalid annotation {}".format(box))
                 invalid = True
             for k in range(4):
                 # filter out box with unspport text length
@@ -142,6 +144,7 @@ class EASTDataGeneration:
                         box[k * 2 + 1] - box[(k + 1) * 2 % 8 + 1]) ** 2) <= self.max_text_width):
                     invalid = True
                     print("filter out oversized text")
+                    logger.info("filter out oversized text")
                     gt_boxes_ignore_valid.append(box)
             if not invalid:
                 gt_boxes_valid.append(np.array(box, dtype=np.int32))

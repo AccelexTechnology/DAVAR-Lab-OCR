@@ -9,6 +9,7 @@
 ###################################################################################################
 """
 
+from asyncio.log import logger
 from ctypes import c_int, c_float
 import os
 import numpy as np
@@ -161,6 +162,7 @@ class TPDataGeneration:
         for i, box in enumerate(gt_boxes):
             if len(box) > 48:
                 print("Point length larger than 48!")
+                logger.info("Point length larger than 48!")
             gt_boxes_length_np[i] = len(box)
             for j, box_j in enumerate(box):
                 gt_boxes_np[i, j] = box_j
@@ -168,6 +170,7 @@ class TPDataGeneration:
         for i, box in enumerate(gt_boxes_ignore):
             if len(box) > 48:
                 print("Point length larger than 48!")
+                logger.info("Point length larger than 48!")
             gt_boxes_ignore_length_np[i] = len(box)
             for j, box_j in enumerate(box):
                 gt_boxes_ignore_np[i, j] = box_j

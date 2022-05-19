@@ -8,6 +8,7 @@
 # Date           :    2021-06-24
 ##################################################################################################
 """
+from asyncio.log import logger
 import mmcv
 import json
 from davarocr.davar_common.apis import inference_model, init_model
@@ -40,6 +41,7 @@ for filename in test_file:
     img_name = img_path.split("/")[-1]
     # Inference
     print('predicting {} - {}'.format(cnt, img_path))
+    logger.info('predicting {} - {}'.format(cnt, img_path))
     time_start = time.time()
     result = inference_model(model, img)[0]
     time_end = time.time()
@@ -65,6 +67,8 @@ for filename in test_file:
     cnt += 1
 print('FPS: {}'.format(cnt / time_sum))
 print('total time: {}'.format(time_sum))
+logger.info('FPS: {}'.format(cnt / time_sum))
+logger.info('total time: {}'.format(time_sum))
 
 
 

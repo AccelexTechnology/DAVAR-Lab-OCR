@@ -9,6 +9,7 @@
 ##################################################################################################
 """
 
+from asyncio.log import logger
 import logging
 
 import torch
@@ -268,6 +269,8 @@ class TextRecommenderHead(AttentionHead):
             loss_triplet = self.loss_triplet(anchor, positive, negative)
             print('anchor-positive sim', torch.cosine_similarity(anchor, positive, dim=1))
             print('anchor-negative sim', torch.cosine_similarity(anchor, negative, dim=1))
+            logger.info('anchor-positive sim', torch.cosine_similarity(anchor, positive, dim=1))
+            logger.info('anchor-negative sim', torch.cosine_similarity(anchor, negative, dim=1))
             loss['loss_triplet'] = loss_triplet
 
         # Only fix_qscore is False, can we train the score branch
@@ -275,6 +278,8 @@ class TextRecommenderHead(AttentionHead):
             loss['loss_l1'] = self.loss_l1(pred_scores, gt_scores)
             print('gt  scores', gt_scores[:10])
             print('pre scores', pred_scores[:10])
+            logger.info('gt  scores', gt_scores[:10])
+            logger.info('pre scores', pred_scores[:10])
 
         return loss
 

@@ -9,6 +9,7 @@
 ##################################################################################################
 """
 from __future__ import division
+from asyncio.log import logger
 import random
 
 from torch.utils.data import Sampler
@@ -43,6 +44,7 @@ class MetricSampler(Sampler):
         for key, value in self.group_indices.items():
             if len(value.keys()) == 1:
                 print(key, "this video has only one track, chose negative sample from diff video")
+                logger.info(key, "this video has only one track, chose negative sample from diff video")
 
         # Divide the samples per gpu into 3 parts: anchor, positive, negative
         self.anchor_nums_per_gpu = samples_per_gpu // 3
@@ -68,6 +70,8 @@ class MetricSampler(Sampler):
         positive_indices, negative_indices = self.generate_apn(anchor_indices)
 
         print("length of anchor_indices, positive_indices, negative_indices",  len(anchor_indices),
+              len(positive_indices), len(negative_indices))
+        logger.info("length of anchor_indices, positive_indices, negative_indices",  len(anchor_indices),
               len(positive_indices), len(negative_indices))
 
         # Make sure three parts length are equal

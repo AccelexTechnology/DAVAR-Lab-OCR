@@ -198,6 +198,7 @@ def main():
                             total_dataset.append(testset['Name'])
                         if not os.path.exists(model_path):
                             print(model_path + ' not exist.')
+                            logger.info(model_path + ' not exist.')
                             continue
 
                         print('Processing {} \n'
@@ -214,7 +215,20 @@ def main():
                                                         testset['Name'],
                                                         model_path,
                                                         config_file))
-
+                        logger.info('Processing {} \n'
+                              'epoch of {}/{} \n'
+                              'ckpts in {}/{} \n'
+                              'testsets... \n'
+                              'model_name:{} \n'
+                              'testset_name:{} \n'
+                              '/model_path:{} \n'
+                              'config_path:{}\n'.format(epoch, c_index,
+                                                        len(ckpts), t_index,
+                                                        len(testsets),
+                                                        ckpt['Name'],
+                                                        testset['Name'],
+                                                        model_path,
+                                                        config_file))
                         res_path = \
                             cfg.test_path + testset['Name'] + '@' + ckpt['Name'] + '_e' + str(epoch) + '_res.json'
                         eval_path = \
@@ -224,6 +238,7 @@ def main():
                         if cfg.do_test:
                             if os.path.exists(res_path) and not cfg.force_test:
                                 print(res_path + ' already exists!')
+                                logger.info(res_path + ' already exists!')
                             else:
                                 # load the model config file
                                 config_cfg = mmcv.Config.fromfile(config_file)
@@ -265,6 +280,7 @@ def main():
                         if cfg.do_eval:
                             if os.path.exists(eval_path) and not cfg.force_eval:
                                 print(eval_path + ' already exists!')
+                                logger.info(eval_path + ' already exists!')
                             else:
                                 # evaluation result
                                 acc_result = eval_json(res_path, eval_path, cfg.data.test.batch_max_length)
@@ -278,6 +294,7 @@ def main():
                     total_dataset.append(testset['Name'])
                     if not os.path.exists(model_path):
                         print(model_path + ' not exist.')
+                        logger.info(model_path + ' not exist.')
                         return
                     res_path = cfg.test_path + testset['Name'] + '@' + ckpt['Name'] + '_res.json'
                     eval_path = cfg.eval_path + testset['Name'] + '@' + ckpt['Name'] + '_eval.json'
@@ -285,10 +302,12 @@ def main():
                     if cfg.do_test:
                         if os.path.exists(res_path) and not cfg.force_test:
                             print(res_path + ' already exists!')
+                            logger.info(res_path + ' already exists!')
                         else:
                             # load the model config file
                             config_cfg = mmcv.Config.fromfile(config_file)
                             print(config_file)
+                            logger.info(config_file)
                             test_cfg = config_cfg.test_cfg
 
                             # build recognition model
@@ -325,6 +344,7 @@ def main():
                     if cfg.do_eval:
                         if os.path.exists(eval_path) and not cfg.force_eval:
                             print(eval_path + ' already exists!')
+                            logger.info(eval_path + ' already exists!')
                         else:
                             # evaluation result
                             acc_result = eval_json(res_path, eval_path, cfg.data.test.batch_max_length)

@@ -9,6 +9,7 @@
 #########################################################################
 """
 
+from asyncio.log import logger
 import mmcv
 from davarocr.davar_common.apis import inference_model, init_model
 import cv2
@@ -51,11 +52,13 @@ for filename in test_file:
 
     # Inference
     print('predicting {} - {}'.format(cnt, img_path))
+    logger.info('predicting {} - {}'.format(cnt, img_path))
     time_start = time.time()
     result = inference_model(model, img_path)
     time_end = time.time()
     time_sum += (time_end - time_start)
     print(result)
+    logger.info(f'result\n{result}')
 
     # Save pred in txt format
     txt = open(out_put_dir+"{}.txt".format(filename.split("/")[-1].split(".")[0]), "w")
@@ -90,6 +93,10 @@ for filename in test_file:
     cnt += 1
 print('FPS: {}'.format(cnt / time_sum))
 print('total time: {}'.format(time_sum))
+
+
+logger.info('FPS: {}'.format(cnt / time_sum))
+logger.info('total time: {}'.format(time_sum))
 
 with open("total_pred.json", "w") as write_f:
     json.dump(out_dict, write_f, ensure_ascii=False, indent=4)

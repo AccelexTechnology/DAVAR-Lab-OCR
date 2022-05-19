@@ -8,6 +8,8 @@
 # Date           :    2021-05-01
 ##################################################################################################
 """
+from asyncio.log import logger
+from logging import Logger
 import os.path as osp
 import json
 import random
@@ -454,6 +456,7 @@ class DavarRCGDataset(Dataset):
                             continue
                     except:
                         print(text, cares[i], labels[i])
+                        logger.info(text, cares[i], labels[i])
 
                 reslist.append({
                     'filename': k,
@@ -522,12 +525,14 @@ class DavarRCGDataset(Dataset):
             print("\n")
             for i in range(min(length_of_data, 5)):
                 print('gt: %-30s\t pred: %-30s' % (labels[i], results[i]))
+                Logger.info('gt: %-30s\t pred: %-30s' % (labels[i], results[i]))
 
         # rf_learning visual counting
         if isinstance(results[0], int):
             print("\n")
             for i in range(min(length_of_data, 5)):
                 print('gt: %-30s\t length of gt:%-30s\t pred: %-30s' % (labels[i], len(labels[i]), results[i]))
+                Logger.info('gt: %-30s\t length of gt:%-30s\t pred: %-30s' % (labels[i], len(labels[i]), results[i]))
 
         # rf_learning total
         if isinstance(results[0], tuple) and isinstance(results[0][0], str) and isinstance(results[0][1], int):
@@ -535,7 +540,9 @@ class DavarRCGDataset(Dataset):
             for i in range(min(length_of_data, 5)):
                 print('gt: %-30s\t pred str: %-30s\t length of gt:%-30s\t  pred length:%-30s' %
                       (labels[i], results[i][0], len(labels[i]), results[i][1]))
-
+                Logger.info('gt: %-30s\t pred str: %-30s\t length of gt:%-30s\t  pred length:%-30s' %
+                      (labels[i], results[i][0], len(labels[i]), results[i][1]))
+                
         for pred, label in zip(results, labels):
             if isinstance(pred, str):
 
@@ -616,6 +623,7 @@ def loose_tight_to_list(img_infos, pipeline_dict):
                 bboxes = [0, 0, width - 1, 0, width - 1, height - 1, 0, height - 1]
         except KeyError as _:
             print(value)
+            logger.info(value)
             continue
 
         for _, text in enumerate(texts):

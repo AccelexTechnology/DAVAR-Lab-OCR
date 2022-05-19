@@ -9,6 +9,8 @@
 ##################################################################################################
 """
 
+from asyncio.log import logger
+from cmath import log
 import os
 import json
 import glob
@@ -216,6 +218,7 @@ def gen_train_score(glimpses, img_info, refer, output):
 
     for key, value in track_dict.items():
         print("processing track id: ", key)
+        logger.info("processing track id: ", key)
         indices = value[0]
         quality = value[1]
         care = value[2]
@@ -505,6 +508,7 @@ def txr2json(gt_file, predict_txt_dir, out_file):
         # The txt name is made by "Video_name-frame"
         txt_name = txt.split('/')[-1]
         print("processing video :", txt_name)
+        logger.info("processing video :", txt_name)
         video = txt_name.split('-')[0]
         frame_id = txt_name.split('-')[-1].split('.')[0]
         key = video + '/' + frame_id + '.jpg'
@@ -577,6 +581,7 @@ def format_json(data, refer, output):
                     if i_id == track_id:
                         if flag:
                             print(refer_data[filename], "this frame exists two same track id instance")
+                            logger.info(refer_data[filename], "this frame exists two same track id instance")
                         flag = True
                         refer_data[filename]['content_ann']['score'][idx] = img_info['ann']['score']
                         refer_data[filename]['content_ann']['cares'][idx] = 1

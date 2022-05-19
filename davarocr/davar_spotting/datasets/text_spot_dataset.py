@@ -9,6 +9,7 @@
 ##################################################################################################
 """
 
+from logging import Logger
 from mmdet.datasets.builder import DATASETS
 from mmcv.utils import print_log
 from davarocr.davar_common.datasets.davar_custom import DavarCustomDataset
@@ -108,6 +109,9 @@ class TextSpotDataset(DavarCustomDataset):
         print("\nDo {} evaluation with iou constraint {}...".format(
             "Word Spotting" if self.eval_func_params["WORD_SPOTTING"] else "End-to-End",
             self.eval_func_params["IOU_CONSTRAINT"]))
+        Logger.info("\nDo {} evaluation with iou constraint {}...".format(
+            "Word Spotting" if self.eval_func_params["WORD_SPOTTING"] else "End-to-End",
+            self.eval_func_params["IOU_CONSTRAINT"]))
 
         det_results = []
         gt_results = []
@@ -144,6 +148,7 @@ class TextSpotDataset(DavarCustomDataset):
         output['hmean'] = evaluate_result['summary']['spot_hmean']
 
         print("Finish evaluation !")
+        Logger.info("Finish evaluation !")
 
         print_log("Detection evaluation results: Precision: {}, Recall: {}, hmean: {}".
           format(evaluate_result['summary']['det_precision'],

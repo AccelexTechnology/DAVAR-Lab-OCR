@@ -10,6 +10,7 @@
 """
 
 
+from asyncio.log import logger
 import os.path as osp
 
 from mmdet.datasets import DATASETS
@@ -72,9 +73,11 @@ class YORORCGDataset(DavarRCGDataset):
 
         if not self.filter_cares:
             print("filter cares is False, do not filter those care field is 0 samples")
+            logger.info("filter cares is False, do not filter those care field is 0 samples")
 
         if not self.filter_scores:
             print("filter score is False, do not filter those score field is None samples")
+            logger.info("filter score is False, do not filter those score field is None samples")
 
         # Support datalist use absolute path and relative path
         if osp.isfile(osp.join(img_prefix, ann_file)):

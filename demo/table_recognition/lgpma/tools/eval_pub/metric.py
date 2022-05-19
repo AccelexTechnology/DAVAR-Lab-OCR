@@ -9,6 +9,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # Apache 2.0 License for more details.
 
+from asyncio.log import logger
 import distance
 from apted import APTED, Config
 from apted.helpers import Tree
@@ -160,3 +161,4 @@ if __name__ == '__main__':
     scores = teds.batch_evaluate(pred_json, true_json)
     pp = pprint.PrettyPrinter()
     pp.pprint(scores)
+    logger.info(f'score\n{scores}')

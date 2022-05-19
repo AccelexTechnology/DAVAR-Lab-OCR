@@ -1,3 +1,4 @@
+from asyncio.log import logger
 import os
 import json
 import cv2
@@ -29,6 +30,7 @@ def worker(example):
 	save_name = os.path.join(json_out_dir, os.path.basename(example.filepath).replace('.jpg', '.json'))
 	if not os.path.exists(save_name):
 		print(save_name)
+		logger.info(f'save name\n{save_name}')
 
 		formatted_json = {}
 		formatted_json['height'] = example.pagesize[1]

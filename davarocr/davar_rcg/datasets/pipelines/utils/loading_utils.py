@@ -8,6 +8,7 @@
 # Date           :    2021-05-01
 ##################################################################################################
 """
+from asyncio.log import logger
 import random
 import math
 import json
@@ -37,6 +38,7 @@ def wordmap_loader(wordmap, load_type):
         print("--------------------------------------------------------------------------------")
         print(" -- RCGLoadImageFrom %s loading characters from user predefined file !!! --" % load_type)
         print("--------------------------------------------------------------------------------")
+        logger.info(" -- RCGLoadImageFrom %s loading characters from user predefined file !!! --" % load_type)
 
         # character dictionary is json format
         if wordmap.endswith('.json'):

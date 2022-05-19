@@ -9,6 +9,7 @@
 # Date           :    2021-05-01
 ##################################################################################################
 """
+from asyncio.log import logger
 import cv2
 import numpy as np
 import glob
@@ -31,6 +32,7 @@ if __name__ == '__main__':
     for video in videos:
         video_name = video.split('/')[-1]
         print("processing video: " + str(video_name))
+        logger.info("processing video: " + str(video_name))
         # the image's format is .jpg or .JPG by default
         frames = list(glob.glob(video + '/*.jpg')) + list(glob.glob(video + '/*.JPG'))
         # sort the frames by frame id
@@ -40,6 +42,7 @@ if __name__ == '__main__':
         adjacent_num = (window_size - 1) // 2
         for i in range(len(frames)):
             print("processing frames: " + frames[i])
+            logger.info("processing frames: " + frames[i])
             index = []
             for left in range(i - adjacent_num, i):
                 # if left adjacent number is not enough, we add the first frame

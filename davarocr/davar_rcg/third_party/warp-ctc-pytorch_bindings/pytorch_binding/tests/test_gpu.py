@@ -1,3 +1,4 @@
+from asyncio.log import logger
 import torch
 import warpctc_pytorch as warp_ctc
 import pytest
@@ -21,6 +22,7 @@ def test_simple():
                      costs,
                      0)
     print('CPU_cost: %f' % costs.sum())
+    logger.info('CPU_cost: %f' % costs.sum())
     probs = probs.clone().cuda()
     grads = torch.zeros(probs.size()).cuda()
     costs = torch.zeros(minibatch_size)
@@ -34,6 +36,8 @@ def test_simple():
                      0)
     print('GPU_cost: %f' % costs.sum())
     print(grads.view(grads.size(0) * grads.size(1), grads.size(2)))
+    logger.info('GPU_cost: %f' % costs.sum())
+    logger.info(grads.view(grads.size(0) * grads.size(1), grads.size(2)))
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="requires GPU")
@@ -59,6 +63,7 @@ def test_medium(multiplier):
                      costs,
                      0)
     print('CPU_cost: %f' % costs.sum())
+    logger.info('CPU_cost: %f' % costs.sum())
     probs = probs.clone().cuda()
     grads = torch.zeros(probs.size()).cuda()
     costs = torch.zeros(minibatch_size)
@@ -72,6 +77,8 @@ def test_medium(multiplier):
                      0)
     print('GPU_cost: %f' % costs.sum())
     print(grads.view(grads.size(0) * grads.size(1), grads.size(2)))
+    logger.info('GPU_cost: %f' % costs.sum())
+    logger.info(grads.view(grads.size(0) * grads.size(1), grads.size(2)))
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="requires GPU")
@@ -96,6 +103,7 @@ def test_empty_label():
                      costs,
                      0)
     print('CPU_cost: %f' % costs.sum())
+    logger.info('CPU_cost: %f' % costs.sum())
     probs = probs.clone().cuda()
     grads = torch.zeros(probs.size()).cuda()
     costs = torch.zeros(minibatch_size)
@@ -109,6 +117,8 @@ def test_empty_label():
                      0)
     print('GPU_cost: %f' % costs.sum())
     print(grads.view(grads.size(0) * grads.size(1), grads.size(2)))
+    logger.info('GPU_cost: %f' % costs.sum())
+    logger.info(grads.view(grads.size(0) * grads.size(1), grads.size(2)))
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="requires GPU")

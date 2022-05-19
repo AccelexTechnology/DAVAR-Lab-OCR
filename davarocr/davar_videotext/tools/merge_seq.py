@@ -8,6 +8,7 @@
 # Date           :    2021-07-15
 ##################################################################################################
 """
+from asyncio.log import logger
 import os
 import argparse
 import json
@@ -90,6 +91,7 @@ if __name__ == '__main__':
         img_point_dict = {}
 
         print("processing video: ", video_key)
+        logger.info("processing video: ", video_key)
 
         # Get each track data in a video
         for track_key in track_res[video_key].keys():
@@ -256,6 +258,10 @@ if __name__ == '__main__':
                                     iou) + ' edit_iou: ' + str(edit_dist_iou_val) + ' ' + str(
                                     seq_word_dict[key1]) + ' ' + str(seq_word_dict[key2]) + ' ' + str(
                                     nearest_frame) + ' ' + str(seq2_start_frame))
+                                logger.info('seq ' + str(key1) + ' and ' + str(key2) + ' merged, iou: ' + str(
+                                    iou) + ' edit_iou: ' + str(edit_dist_iou_val) + ' ' + str(
+                                    seq_word_dict[key1]) + ' ' + str(seq_word_dict[key2]) + ' ' + str(
+                                    nearest_frame) + ' ' + str(seq2_start_frame))
 
                                 # Remove key2 val in dict
                                 seq_word_dict.pop(key2)
@@ -317,6 +323,10 @@ if __name__ == '__main__':
                                 merged_word = seq_word_dict[key1]
 
                                 print('seq ' + str(key1) + ' and ' + str(key2) + ' merged, iou: ' + str(
+                                    iou) + ' edit_iou: ' + str(edit_dist_iou_val) + ' ' + str(
+                                    seq_word_dict[key1]) + ' ' + str(seq_word_dict[key2]) + ' ' + str(
+                                    seq1_start_frame) + ' ' + str(nearest_frame))
+                                logger.info('seq ' + str(key1) + ' and ' + str(key2) + ' merged, iou: ' + str(
                                     iou) + ' edit_iou: ' + str(edit_dist_iou_val) + ' ' + str(
                                     seq_word_dict[key1]) + ' ' + str(seq_word_dict[key2]) + ' ' + str(
                                     seq1_start_frame) + ' ' + str(nearest_frame))

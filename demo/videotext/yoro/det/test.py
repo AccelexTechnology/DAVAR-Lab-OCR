@@ -1,3 +1,4 @@
+from asyncio.log import logger
 import mmcv
 from davarocr.davar_videotext.tools import test_utils
 from davarocr.davar_common.apis import init_model, inference_model
@@ -57,6 +58,7 @@ if __name__ == '__main__':
         target_idx = (windowSize - 1) // 2
 
         print("processing img: " + data_infos[index[target_idx]]['filename'])
+        logger.info("processing img: " + data_infos[index[target_idx]]['filename'])
 
         video = data_infos[index[target_idx]]['video']
         filename = data_infos[index[target_idx]]['filename']
@@ -131,3 +133,4 @@ if __name__ == '__main__':
     test_utils.txr2json(test_dataset, out_put_dir, result_json)
     time_end = time.time()
     print('total time: {}'.format(time_end - time_start))
+    logger.info('total time: {}'.format(time_end - time_start))

@@ -8,6 +8,7 @@
 # Date           :    2021-03-07
 ##################################################################################################
 """
+from asyncio.log import logger
 import functools
 import math
 
@@ -197,6 +198,7 @@ class SPIN_ColorTransformer(nn.Module):
                                   # nn.ReLU(True)
             )
             print(self.spt_convnet)
+            logger.info(self.spt_convnet)
             self.stucture_fc1 = nn.Sequential(
                                   nn.Conv2d(128, 256,
                                             3, 1, 1,

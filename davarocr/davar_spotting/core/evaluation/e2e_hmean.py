@@ -9,6 +9,7 @@
 # Date           :    2020-05-31
 ##################################################################################################
 """
+from asyncio.log import logger
 import numpy as np
 import Polygon as plg
 
@@ -92,6 +93,7 @@ def evaluate_method(det_results, gt_results, evaluationParams):
             return get_intersection(pD, pG) / get_union(pD, pG)
         except Exception as e:
             print("error occurs when calculate IOU")
+            logger.info("error occurs when calculate IOU")
             return 0
 
     def get_intersection(pD, pG):

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from asyncio.log import logger
 import os
 import json
 import time
@@ -25,6 +26,7 @@ def ATA(track_dict, gt_dict, voca_dict, care_rcg):
 
         video_num = video_num + 1
         print('processing ' + video_name)
+        logger.info('processing ' + video_name)
 
         # Loading vocabulary, If no vocabulary, the list will be empty
         if voca_res is not None:
@@ -177,12 +179,14 @@ def ATA(track_dict, gt_dict, voca_dict, care_rcg):
             gt_num - gt_notcare_num + tracked_num - not_care_matched_num) / 2)
 
         print('current video ATA : '+str(cur_video_ata)+'\n')
+        logger.info('current video ATA : '+str(cur_video_ata)+'\n')
         avg_video_ata = avg_video_ata + cur_video_ata
 
     final_ata = np.float(avg_video_ata) / video_num
     print("\n****************************final ATA result****************************************************")
     print('final ata : ' + str(final_ata))
     print("************************************************************************************************\n")
+    logger.info('final ata : ' + str(final_ata))
     return final_ata
 
 
@@ -212,3 +216,4 @@ if __name__ == '__main__':
     end_time = time.time()
     
     print('Running time: %s Seconds' % (end_time - start_time))
+    logger.info('Running time: %s Seconds' % (end_time - start_time))

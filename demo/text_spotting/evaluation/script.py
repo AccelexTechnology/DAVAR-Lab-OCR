@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from asyncio.log import logger
 from collections import namedtuple
 import rrc_evaluation_funcs
 import importlib
@@ -503,6 +504,13 @@ def evaluate_method(gtFilePath, submFilePath, evaluationParams):
     print("det_recall: ", round(det_recall, 4), "det_precision: ", round(det_precision, 4), "det_hmean: ",
           round(det_hmean, 4))
     print("spot_recall: ", round(spot_recall, 4), "spot_precision: ", round(spot_precision, 4), "spot_hmean: ",
+          round(spot_hmean, 4))
+
+    logger.info('num_gt, num_det: ', numGlobalCareGt, totalNumDetPols)
+    logger.info("Origin:")
+    logger.info("det_recall: ", round(det_recall, 4), "det_precision: ", round(det_precision, 4), "det_hmean: ",
+          round(det_hmean, 4))
+    logger.info("spot_recall: ", round(spot_recall, 4), "spot_precision: ", round(spot_precision, 4), "spot_hmean: ",
           round(spot_hmean, 4))
 
     resDict = {'calculated': True, 'Message': '', 'method': methodMetrics, 'per_sample': perSampleMetrics}

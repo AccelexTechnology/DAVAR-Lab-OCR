@@ -8,6 +8,7 @@
 # Date           :    2020-12-06
 ##################################################################################################
 """
+from asyncio.log import logger
 import json
 import copy
 import tempfile
@@ -392,6 +393,7 @@ class PublaynetDataset(MMLayoutDataset):
 
         for metric in metrics:
             print('Evaluating {}...'.format(metric))
+            logger.info('Evaluating {}...'.format(metric))
             cocoDt = self.cocoGt.loadRes(format_result[metric])
 
             # only evaluate on valid imgids
@@ -441,6 +443,7 @@ class PublaynetDataset(MMLayoutDataset):
                 table_data += [result for result in results_2d]
                 table = AsciiTable(table_data)
                 print('\n' + table.table)
+                logger.info('\n' + table.table)
 
             if metric_items is None:
                 metric_items = [

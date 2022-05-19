@@ -242,6 +242,7 @@ def main():
     if rank == 0:
         if args.out:
             print(f'\nwriting results to {args.out}')
+            logger.info(f'\nwriting results to {args.out}')
             mmcv.dump(outputs, args.out)
         kwargs = {} if args.eval_options is None else args.eval_options
         if args.format_only:
@@ -256,6 +257,7 @@ def main():
                 eval_kwargs.pop(key, None)
             eval_kwargs.update(dict(metric=args.eval, **kwargs))
             print(dataset.evaluate(outputs, **eval_kwargs))
+            logger.info(dataset.evaluate(outputs, **eval_kwargs))
 
 
 if __name__ == '__main__':

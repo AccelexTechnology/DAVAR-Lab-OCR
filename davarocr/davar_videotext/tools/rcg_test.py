@@ -171,6 +171,7 @@ def main():
             total_dataset.append(testset['Name'])
             if not os.path.exists(model_path):
                 print(model_path + ' not exist.')
+                logger.info(model_path + ' not exist.')
                 return
 
             # Output file
@@ -180,6 +181,7 @@ def main():
             # --------------------test-------------------
             if os.path.exists(train_score_path) and not cfg.force_test:
                 print(train_score_path + ' already exists!')
+                logger.info(train_score_path + ' already exists!')
             else:
                 # Load the model config file
                 config_cfg = mmcv.Config.fromfile(config_file)

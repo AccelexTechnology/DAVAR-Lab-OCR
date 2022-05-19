@@ -8,6 +8,7 @@
 # Date           :    2020-05-31
 ##################################################################################################
 """
+from asyncio.log import logger
 from mmcv.utils import collect_env as collect_base_env
 from mmcv.utils import get_git_hash
 
@@ -23,4 +24,5 @@ def collect_env():
 
 if __name__ == '__main__':
     for name, val in collect_env().items():
+        logger.info('{name}: {val}')
         print(f'{name}: {val}')

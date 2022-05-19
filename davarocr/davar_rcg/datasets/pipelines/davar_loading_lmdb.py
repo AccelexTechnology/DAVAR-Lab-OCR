@@ -8,6 +8,7 @@
 # Date           :    2021-05-01
 ##################################################################################################
 """
+from asyncio.log import logger
 import re
 import json
 import os.path as osp
@@ -129,6 +130,7 @@ def rcg_lmdb_dataload(load_type,
         except IOError:
             if load_type == "LMDB_Standard":
                 print('Corrupted image for ' + str(index))
+                logger.info('Corrupted image for ' + str(index))
                 # make dummy image and dummy label for corrupted image.
                 if color_type == "rgb":
                     img = Image.new('RGB', (img_w, img_h))
@@ -145,6 +147,7 @@ def rcg_lmdb_dataload(load_type,
                 img = np.array(img)
             else:
                 print('Corrupted image')
+                logger.info('Corrupted image')
 
         # use the upper or lower character
         if not sensitive:
@@ -170,6 +173,7 @@ def rcg_lmdb_dataload(load_type,
 
             if label == '':
                 # print('LMDB_Davar Empty Label:',key)
+                logger.info('LMDB_Davar Empty Label:',key)
                 return None
 
         results['img'] = img

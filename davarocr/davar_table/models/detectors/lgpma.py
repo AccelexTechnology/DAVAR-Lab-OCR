@@ -133,6 +133,7 @@ class LGPMA(TwoStageDetector):
         except:
             err_str = f"ERROR in roi loss calculation\n{img_metas}"
             print(err_str)
+            logger.info(err_str)
             raise ValueError(err_str)
 
         # try:

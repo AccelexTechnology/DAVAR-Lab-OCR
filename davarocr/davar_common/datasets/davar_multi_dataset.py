@@ -9,6 +9,7 @@
 ##################################################################################################
 """
 
+from asyncio.log import logger
 import bisect
 
 from torch.utils.data import ConcatDataset
@@ -48,6 +49,7 @@ class DavarMultiDataset(Dataset):
 
         for _, dataset_ in enumerate(dataset):
             print('number of samples:', len(dataset_))
+            logger.info('number of samples:', len(dataset_))
             self.datasets.append(dataset_)
 
         # concat all the dataset

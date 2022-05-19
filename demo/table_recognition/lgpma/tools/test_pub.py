@@ -9,6 +9,7 @@
 ##################################################################################################
 """
 
+from asyncio.log import logger
 import cv2
 import json
 import jsonlines
@@ -81,3 +82,4 @@ for data in test_file:
 teds = TEDS(structure_only=True, n_jobs=16)
 scores = teds.batch_evaluate(pred_dict, gt_dict)
 print(np.array(list(scores.values())).mean())
+logger.info(np.array(list(scores.values())).mean())

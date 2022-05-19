@@ -10,6 +10,7 @@
                       for the ACELabelConverter.
 ##################################################################################################
 """
+from asyncio.log import logger
 import os.path as osp
 
 import torch
@@ -66,6 +67,7 @@ class ACELabelConverter:
             raise Exception("dictionary file only support the txt and json file !!!")
 
         print("recognition dictionary %s \t" % str(self.dict).encode(encoding="utf-8").decode(encoding="utf-8"))
+        logger.info("recognition dictionary %s \t" % str(self.dict).encode(encoding="utf-8").decode(encoding="utf-8"))
 
     def encode(self, text, batch_max_length=25):
         """

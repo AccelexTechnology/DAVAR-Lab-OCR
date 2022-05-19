@@ -1,3 +1,4 @@
+from asyncio.log import logger
 import torch
 import warpctc_pytorch as warp_ctc
 import pytest
@@ -20,6 +21,7 @@ def test_simple():
                      costs,
                      0)
     print('CPU_cost: %f' % costs.sum())
+    logger.info('CPU_cost: %f' % costs.sum())
 
 
 @pytest.mark.parametrize("multiplier", [1.0, 200.0])
@@ -44,6 +46,7 @@ def test_medium(multiplier):
                      costs,
                      0)
     print('CPU_cost: %f' % costs.sum())
+    logger.info('CPU_cost: %f' % costs.sum())
 
 
 def test_empty_label():
@@ -67,6 +70,7 @@ def test_empty_label():
                      costs,
                      0)
     print('CPU_cost: %f' % costs.sum())
+    logger.info('CPU_cost: %f' % costs.sum())
 
 
 def test_CTCLoss():

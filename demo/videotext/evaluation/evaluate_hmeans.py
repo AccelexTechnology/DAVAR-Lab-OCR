@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from asyncio.log import logger
 import os
 import json
 import time
@@ -32,6 +33,7 @@ def Fscore(track_dict, gt_dict, voca_dict, hit_iou_thresh=0.5):
 
     for video_name in track_dict.keys():
         print('process ' + video_name)
+        logger.info('process ' + video_name)
 
         # Loading vocabulary, If no vocabulary, the list will be empty
         if voca_res is not None:
@@ -58,6 +60,7 @@ def Fscore(track_dict, gt_dict, voca_dict, hit_iou_thresh=0.5):
 
             if selected_seq_ind in pre_matched_dict.keys():
                 print('the predict seq id is not unique')
+                logger.info('the predict seq id is not unique')
 
             # Init
             pre_matched_dict[selected_seq_ind] = 0
@@ -154,6 +157,14 @@ def Fscore(track_dict, gt_dict, voca_dict, hit_iou_thresh=0.5):
 
         print(video_name, 'h-means = ' + str(h_means_))
 
+        logger.info(video_name, 'recall = ' + str(matched_pre_num) + '/' +
+              str((len(gt_matched_dict.keys()) - gt_notcare_num)) + ' = ' + str(recall_))
+
+        logger.info(video_name, 'precision = ' + str(matched_gt_num) + '/' +
+              str((len(pre_matched_dict.keys()) - matched_notcare_pre_num)) + ' = ' + str(precision_))
+
+        logger.info(video_name, 'h-means = ' + str(h_means_))
+
         all_matched_pre_num = all_matched_pre_num + matched_pre_num
         all_macthed_gt_num = all_macthed_gt_num + matched_gt_num
         all_pre_num = all_pre_num + (len(pre_matched_dict.keys()) - matched_notcare_pre_num)
@@ -168,7 +179,9 @@ def Fscore(track_dict, gt_dict, voca_dict, hit_iou_thresh=0.5):
     print('total precision = ' + str(all_matched_pre_num) + '/' + str(all_pre_num) + ' = ' + str(precision))
     print('total h-means = ' + str(h_means))
     print("***************************************************************************************************\n")
-
+    logger.info('total recall = ' + str(all_macthed_gt_num) + '/' + str(all_gt_num) + ' = ' + str(recall))
+    logger.info('total precision = ' + str(all_matched_pre_num) + '/' + str(all_pre_num) + ' = ' + str(precision))
+    logger.info('total h-means = ' + str(h_means))
 
 if __name__ == '__main__':
 
@@ -195,3 +208,4 @@ if __name__ == '__main__':
     end_time = time.time()
     
     print('Running time: %s Seconds' % (end_time - start_time))
+    logger.info('Running time: %s Seconds' % (end_time - start_time))
