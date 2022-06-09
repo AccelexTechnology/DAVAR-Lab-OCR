@@ -9,6 +9,7 @@
 ##################################################################################################
 """
 
+from asyncio.log import logger
 from math import ceil
 import numpy as np
 from .structures import BitmapMasksTable
@@ -54,9 +55,12 @@ def get_lpmask_single(gt_mask, gt_bbox):
         x_min, y_min, x_max, y_max = ceil(left_col), ceil(left_row), ceil(right_col) - 1, ceil(right_row) - 1
         mean_x = np.where(box_text == 1)[1].mean()
         mean_y = np.where(box_text == 1)[0].mean()
+        logger.info("start the nan checking")
         if np.isnan(mean_x):
+            logger.info(f"make mean_x as x_min: {x_min}")
             mean_x = x_min
         if np.isnan(mean_y):
+            logger.info(f"make mean_y as y_min: {y_min}")
             mean_y = y_min
         middle_x, middle_y = round(mean_x), round(mean_y)
 
