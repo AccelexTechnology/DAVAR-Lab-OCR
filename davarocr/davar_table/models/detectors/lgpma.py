@@ -9,6 +9,7 @@
 ##################################################################################################
 """
 
+from logging import Logger
 import torch
 from asyncio.log import logger
 from torch import nn
@@ -134,7 +135,10 @@ class LGPMA(TwoStageDetector):
                                                  gt_bboxes, gt_labels,
                                                  gt_bboxes_ignore, gt_masks,
                                                  **kwargs)
-
+        print (f'print {losses}')
+        Logger.warning(f'L.W.losses {losses}')
+        logger.warning(f'l.w.losses {losses}')
+        logger.info(f'l.i.losses {losses}')
         try:
             if torch.any(torch.isnan(x)):
                 # err_str = f"The value is NaN\n{x}\n{img_metas}"
