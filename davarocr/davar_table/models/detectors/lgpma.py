@@ -9,6 +9,8 @@
 ##################################################################################################
 """
 
+from asyncio.log import logger
+from logging import Logger
 from torch import nn
 from mmdet.models import builder
 from mmdet.models.builder import DETECTORS
@@ -130,6 +132,10 @@ class LGPMA(TwoStageDetector):
                                                  gt_bboxes, gt_labels,
                                                  gt_bboxes_ignore, gt_masks,
                                                  **kwargs)
+        print (losses)
+        logger.info(f'l.i {losses}')
+        logger.warning(f'l.w {losses}')
+        Logger.warning(f'L.w {losses}')
         losses.update(roi_losses)
 
         # global forward and loss
