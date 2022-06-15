@@ -9,7 +9,6 @@
 ######################################################################################################
 """
 from asyncio.log import logger
-from cmath import log
 import torch
 
 from mmdet.core import bbox2result, bbox2roi
