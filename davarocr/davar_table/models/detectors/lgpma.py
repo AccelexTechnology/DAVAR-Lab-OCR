@@ -9,6 +9,9 @@
 ##################################################################################################
 """
 
+from asyncio.log import logger
+from logging import Logger
+from davarocr.mmcv import runner
 from torch import nn
 from mmdet.models import builder
 from mmdet.models.builder import DETECTORS
@@ -131,7 +134,9 @@ class LGPMA(TwoStageDetector):
                                                  gt_bboxes_ignore, gt_masks,
                                                  **kwargs)
         losses.update(roi_losses)
-
+        print (losses)
+        Logger.warning(f'losses {losses}')
+        logger.warning(f'losses {losses}')
         # global forward and loss
         if self.with_global_seg:
             # Change shape to compatible DavarDefaultFormatBundle
