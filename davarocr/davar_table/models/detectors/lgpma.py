@@ -11,7 +11,6 @@
 
 from asyncio.log import logger
 from logging import Logger
-from davarocr.mmcv import runner
 from torch import nn
 from mmdet.models import builder
 from mmdet.models.builder import DETECTORS
