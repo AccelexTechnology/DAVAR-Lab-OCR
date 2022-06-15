@@ -10,6 +10,7 @@
 ######################################################################################################
 """
 
+from asyncio.log import logger
 import numpy as np
 
 import torch
@@ -251,25 +252,31 @@ class TPHead(nn.Module):
         # Compute segmentation loss
         loss["loss_seg_text"] = self.loss_seg(mask_preds['score_text_pred'], mask_targets['score_text_target'],
                                               weight=mask_targets['score_map_masks_target'])
+        logger.info(f'B.Compute segmentation loss.loss_seg_text {loss}')
         loss["loss_seg_head"] = self.loss_seg(mask_preds['score_head_pred'], mask_targets['score_head_target'],
                                               weight=mask_targets['score_map_masks_target'])
+        logger.info(f'B.Compute segmentation loss.loss_seg_head {loss}')
         loss["loss_seg_tail"] = self.loss_seg(mask_preds['score_tail_pred'], mask_targets['score_tail_target'],
                                               weight=mask_targets['score_map_masks_target'])
+        logger.info(f'B.Compute segmentation loss.loss_seg_tail {loss}')
         loss["loss_seg_bond"] = self.loss_seg(mask_preds['score_bond_pred'], mask_targets['score_bond_target'],
                                               weight=mask_targets['score_map_masks_target'])
-
+        logger.info(f'B.Compute segmentation loss.loss_seg_bond {loss}')
         # Compute regression loss
         if self.loss_reg_head is not None:
             loss_reg_head = self.loss_reg_head(mask_preds['reg_head_pred'], mask_targets['geo_head_target'],
                                                weight=mask_targets['geo_head_weights_target'])
             loss["loss_reg_head"] = loss_reg_head
+            logger.info(f'B.Compute regression loss.loss_reg_head {loss_reg_head}')
         if self.loss_reg_tail is not None:
             loss_reg_tail = self.loss_reg_tail(mask_preds['reg_tail_pred'], mask_targets['geo_tail_target'],
                                                weight=mask_targets['geo_tail_weights_target'])
             loss["loss_reg_tail"] = loss_reg_tail
+            logger.info(f'B.Compute regression loss.loss_reg_tail {loss_reg_tail}')
         if self.loss_reg_bond is not None:
             loss_reg_bond = self.loss_reg_bond(mask_preds['reg_bond_pred'], mask_targets['geo_bond_target'],
                                                weight=mask_targets['geo_bond_weights_target'])
             loss["loss_reg_bond"] = loss_reg_bond
+            logger.info(f'B.Compute regression loss.loss_reg_bond {loss_reg_bond}')
         return loss
 

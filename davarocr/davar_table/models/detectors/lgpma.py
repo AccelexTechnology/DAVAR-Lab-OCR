@@ -9,6 +9,8 @@
 ##################################################################################################
 """
 
+import torch
+from asyncio.log import logger
 from torch import nn
 from mmdet.models import builder
 from mmdet.models.builder import DETECTORS
@@ -108,9 +110,9 @@ class LGPMA(TwoStageDetector):
         """
 
         x = self.extract_feat(img)
-
+        logger.info(f'B.show x which is a tensor: feature map and feature extractor {x}')
         losses = dict()
-
+        logger.info('B.losses inside the LGPMA model starts as a empty dictionary')
         # RPN forward and loss
         if self.with_rpn:
             proposal_cfg = self.train_cfg.get('rpn_proposal',
@@ -122,7 +124,9 @@ class LGPMA(TwoStageDetector):
                 gt_labels=None,
                 gt_bboxes_ignore=gt_bboxes_ignore,
                 proposal_cfg=proposal_cfg)
+            logger.info(f'B.show the rpn losses {rpn_losses}')
             losses.update(rpn_losses)
+            logger.info(f'B.rpn losses update {losses}')
         else:
             proposal_list = proposals
 
@@ -130,7 +134,18 @@ class LGPMA(TwoStageDetector):
                                                  gt_bboxes, gt_labels,
                                                  gt_bboxes_ignore, gt_masks,
                                                  **kwargs)
+
+        try:
+            if torch.any(torch.isnan(x)):
+                # err_str = f"The value is NaN\n{x}\n{img_metas}"
+                logger.info(f'The value is NaN\n{x}\n{img_metas}')
+            else:
+                logger.info(f'The value is not NaN\n{x}\n{img_metas}')
+        except:
+            pass
+        logger.info(f'B.show the roi losses {roi_losses}')
         losses.update(roi_losses)
+        logger.info(f'B.roi losses update {losses}')
 
         # global forward and loss
         if self.with_global_seg:
@@ -139,7 +154,9 @@ class LGPMA(TwoStageDetector):
             seg_pred = self.global_seg_head(x)
             seg_targets = self.global_seg_head.get_target(gt_semantic_seg)
             loss_global_seg = self.global_seg_head.loss(seg_pred, seg_targets)
+            logger.info(f'B.show the loss_global_seg {loss_global_seg}')
             losses.update(loss_global_seg)
+            logger.info(f'B.loss_global_seg update {losses}')
 
         return losses
 

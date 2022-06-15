@@ -8,6 +8,8 @@
 # Date           :    2021-12-13
 ######################################################################################################
 """
+from asyncio.log import logger
+from cmath import log
 import torch
 
 from mmdet.core import bbox2result, bbox2roi
@@ -71,15 +73,16 @@ class StandardRoIHeadWGCN(StandardRoIHead):
             bbox_results = self._bbox_forward_train(x, sampling_results,
                                                     gt_bboxes, gt_labels,
                                                     img_metas)
+            logger.info(f'B.bbox head forward and loss {bbox_results}')
             losses.update(bbox_results['loss_bbox'])
-
+            logger.info(f'B.updated loss {losses}')
         # mask head forward and loss
         if self.with_mask:
             mask_results = self._mask_forward_train(x, sampling_results,
                                                     bbox_results['bbox_feats'],
                                                     gt_masks, img_metas)
             losses.update(mask_results['loss_mask'])
-
+        logger.info(f'B.losses output of forward_train StandardRoIHeadWGCN {losses}')
         return losses
 
     def _bbox_forward(self, x, rois, img_metas=None):
@@ -98,17 +101,21 @@ class StandardRoIHeadWGCN(StandardRoIHead):
     def _bbox_forward_train(self, x, sampling_results, gt_bboxes, gt_labels,
                             img_metas):
         """Run forward function and calculate loss for box head in training."""
+        logger.info(f'B.Run forward function and calculate loss for box head in training')
         rois = bbox2roi([res.bboxes for res in sampling_results])
+        logger.info(f'rois {rois}')
         bbox_results = self._bbox_forward(x, rois, img_metas)
-
+        logger.info(f'bbox_results {bbox_results}')
         bbox_targets = self.bbox_head.get_targets(sampling_results, gt_bboxes,
                                                   gt_labels, self.train_cfg)
+        logger.info(f'bbox_targets {bbox_targets}')
         loss_bbox = self.bbox_head.loss(bbox_results['cls_score'],
                                         bbox_results['bbox_pred'],
                                         rois,
                                         *bbox_targets)
-
+        logger.info(f'loss_bbox {loss_bbox}')
         bbox_results.update(loss_bbox=loss_bbox)
+        logger.info(f'B.bbox_results output of _bbox_forward_train StandardRoIHeadWGCN {bbox_results}')
         return bbox_results
 
     def _mask_forward_train(self, x, sampling_results, bbox_feats, gt_masks,

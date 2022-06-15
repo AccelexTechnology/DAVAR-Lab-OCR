@@ -8,6 +8,7 @@
 # Date           :    2020-05-31
 ####################################################################################################
 """
+from asyncio.log import logger
 import torch.nn as nn
 
 from mmdet.models.detectors.base import BaseDetector
@@ -109,9 +110,10 @@ class SegBasedDet(BaseDetector):
 
         # compute loss
         loss_mask = self.mask_head.loss(mask_pred, mask_targets)
-
+        logger.info(f'B.compute losses loss_mask {loss_mask}')
         # update loss
         losses.update(loss_mask)
+        logger.info(f'B.compute losses {losses}')
 
         # For End-to-End training, To be implemented.
         # This implementation is unavailable currently due to the confidential policy

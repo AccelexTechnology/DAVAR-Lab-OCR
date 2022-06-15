@@ -11,6 +11,7 @@
 # Date           :    2020-05-31
 ##################################################################################################
 """
+from asyncio.log import logger
 import warnings
 import os.path as osp
 import mmcv
@@ -285,11 +286,12 @@ class DavarLoadAnnotations():
                 np.max(x_coords),
                 np.max(y_coords)
             ]
+            logger.info(f'B.aligned_box {aligned_box}')
             if cares[i] == 1:
                 gt_bboxes.append(aligned_box)
             else:
                 gt_bboxes_ignore.append(aligned_box)
-
+        logger.info(f'B.gt_bboxes_ignore {gt_bboxes_ignore}')
         # If there is no bboxes in an image, we fill the results with a np array in shape of (0, 4)
         if len(gt_bboxes) == 0:
             gt_bboxes = np.zeros((0, 4), dtype=np.float32)
@@ -300,12 +302,13 @@ class DavarLoadAnnotations():
             gt_bboxes_ignore = np.zeros((0, 4), dtype=np.float32)
         else:
             gt_bboxes_ignore = np.array(gt_bboxes_ignore, dtype=np.float32)
-
+        logger.info(f'B.gt_bboxes_ignore {gt_bboxes_ignore}')
         results['gt_bboxes'] = gt_bboxes
         results['gt_bboxes_ignore'] = gt_bboxes_ignore
 
         results['bbox_fields'].append('gt_bboxes')
         results['bbox_fields'].append('gt_bboxes_ignore')
+        logger.info(f'B.final result {results}')
         return results
 
     def _load_poly_bboxes(self, results):

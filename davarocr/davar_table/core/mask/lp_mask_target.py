@@ -63,6 +63,7 @@ def get_lpmask_single(gt_mask, gt_bbox):
             logger.info(f"make mean_y as y_min: {y_min}")
             mean_y = y_min
         middle_x, middle_y = round(mean_x), round(mean_y)
+        logger.info(f'Added error handling for when the mask does not contain any 1s { middle_x}, {middle_y}')
 
         # Calculate the pyramid mask in horizontal direction
         col_np = np.arange(x_min, x_max + 1).reshape(1, -1)

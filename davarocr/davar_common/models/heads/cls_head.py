@@ -8,6 +8,7 @@
 # Date           :    2021-05-20
 ##################################################################################################
 """
+from asyncio.log import logger
 import torch.nn as nn
 from mmcv.runner import load_checkpoint
 from mmdet.models.builder import HEADS, build_loss
@@ -82,4 +83,5 @@ class ClsHead(nn.Module):
         target = target.view(-1)
         loss_key = prefix + 'loss_cls_ce'
         loss[loss_key] = self.loss_cls(pred, target)
+        logger.info(f'B.loss computation {loss}')
         return loss

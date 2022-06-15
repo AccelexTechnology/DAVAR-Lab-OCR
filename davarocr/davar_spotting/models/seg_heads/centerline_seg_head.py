@@ -8,6 +8,7 @@
 # Date           :    2021-03-19
 ######################################################################################################
 """
+from asyncio.log import logger
 import torch
 import torch.nn as nn
 import cv2
@@ -241,5 +242,7 @@ class CenterlineSegHead(nn.Module):
             # B x 1 x H x W -> B x H x W x 1 -> B x H x W
             mask_pred = mask_pred.permute(0, 2, 3, 1).squeeze(-1)
             loss_seg = self.loss_seg(mask_pred, mask_target)
+            logger.info(f'B.return all losses in dict {loss_seg}')
             loss.update({"loss_seg_{}x".format(stride):loss_seg})
+        logger.info(f'B.here is the output of the loss {loss}')
         return loss

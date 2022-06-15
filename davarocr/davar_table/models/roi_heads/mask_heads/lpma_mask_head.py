@@ -9,6 +9,9 @@
 ##################################################################################################
 """
 
+from asyncio.log import logger
+from cmath import inf
+from distutils.log import info
 import numpy as np
 import torch
 from torch import nn
@@ -123,21 +126,28 @@ class LPMAMaskHead(FCNMaskHead):
 
         loss = dict()
         if mask_pred.size(0) == 0:
+            logger.info(f'B.show mask_pred.size(0) {mask_pred.size(0)}')
             loss_mask = mask_pred.sum()
+            logger.info(f'B.loss mask when the mask_pred is 0 {loss_mask}')
             loss_lpma = mask_pred.sum()
+            logger.info(f'B.loss lpma when the mask_pred is 0 {loss_lpma}')
+
         else:
             # split lp mask pred and mask pred
+            logger.info("split lp mask pred and mask pred")
             mask_pred, lpmask_pred = mask_pred[:, :-2, :, :], mask_pred[:, -2:, :, :]
             lpmask_targets = torch.stack([mask_targets[1], mask_targets[2]], 1)
+            logger.info(f'B.loss lpma brfore * 5 {loss_lpma}')
             loss_lpma = 5 * self.loss_lpma(lpmask_pred, lpmask_targets)
-
+            logger.info(f'B.loss lpma after * 5 {loss_lpma}')
             if self.class_agnostic:
                 loss_mask = self.loss_mask(mask_pred, mask_targets[0], torch.zeros_like(labels))
             else:
                 loss_mask = self.loss_mask(mask_pred, mask_targets[0], labels)
-
+            logger.info(f'B.show the loss mask if the class is agnostic {loss_mask}')
         loss['loss_mask'] = loss_mask
         loss['loss_lpma'] = loss_lpma
+        logger.info(f'B.after putting the loss mask and lpma {loss}')
 
         return loss
 

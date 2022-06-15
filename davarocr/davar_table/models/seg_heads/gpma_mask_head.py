@@ -9,6 +9,7 @@
 ##################################################################################################
 """
 
+from asyncio.log import logger
 import mmcv
 import torch
 from torch import nn
@@ -169,9 +170,13 @@ class GPMAMaskHead(nn.Module):
 
         loss = dict()
         loss["loss_seg"] = self.loss_mask(mask_pred, mask_target, weight=mask_weights)
+        logger.info(f'B.compute loss inside the gpma mask head loss_seg {loss}')
         if self.loss_reg is not None:
+            logger.info("B.if log_res is not None")
             loss_reg = self.loss_reg(reg_pred, geo_bond_target, weight=geo_weights)
+            logger.info(f'B.loss_reg before * 3 {loss_reg}')
             loss["loss_reg"] = 0.3 * loss_reg
+            logger.info(f'B.loss_reg after * 3 {loss_reg}')
 
         return loss
 

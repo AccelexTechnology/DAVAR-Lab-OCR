@@ -8,6 +8,7 @@
 # Date           :    2021-12-13
 ######################################################################################################
 """
+from asyncio.log import logger
 import torch
 
 from mmdet.core import (bbox2result, bbox2roi, merge_aug_masks)
@@ -57,18 +58,23 @@ class CascadeRoIHeadWGCN(CascadeRoIHead):
         return bbox_results
 
     def _bbox_forward_train(self, stage, x, sampling_results, gt_bboxes, gt_labels, rcnn_train_cfg, img_metas):
+        logger.info("B.run forward function and calculate loss for box head in training.")
         """Run forward function and calculate loss for box head in training."""
         rois = bbox2roi([res.bboxes for res in sampling_results])
+        logger.info(f'B.rois {rois}')
         bbox_results = self._bbox_forward(stage, x, rois, img_metas)
+        logger.info(f'B.bbox_results {bbox_results}')
         bbox_targets = self.bbox_head[stage].get_targets(
             sampling_results, gt_bboxes, gt_labels, rcnn_train_cfg)
+        logger.info(f'B.bbox_targets {bbox_targets}')
         loss_bbox = self.bbox_head[stage].loss(bbox_results['cls_score'],
                                                bbox_results['bbox_pred'],
                                                rois,
                                                *bbox_targets)
-
+        logger.info(f'B.bbox_forward_train, chekc the loss bbox: {loss_bbox}')
         bbox_results.update(
             loss_bbox=loss_bbox, rois=rois, bbox_targets=bbox_targets)
+        logger.info(f'B.bbox_results {bbox_results}')
         return bbox_results
 
     def forward_train(self,
@@ -99,12 +105,13 @@ class CascadeRoIHeadWGCN(CascadeRoIHead):
         Returns:
             dict[str, Tensor]: a dictionary of loss components
         """
+        logger.info("B.forward_train function, losses is empty dictionary")
         losses = dict()
         for i in range(self.num_stages):
             self.current_stage = i
             rcnn_train_cfg = self.train_cfg[i]
             lw = self.stage_loss_weights[i]
-
+            logger.info(f'B.display the lw value {lw}')
             # assign gts and sample proposals
             sampling_results = []
             if self.with_bbox or self.with_mask:
@@ -130,21 +137,24 @@ class CascadeRoIHeadWGCN(CascadeRoIHead):
             bbox_results = self._bbox_forward_train(i, x, sampling_results,
                                                     gt_bboxes, gt_labels,
                                                     rcnn_train_cfg, img_metas)
-
+            logger.info(f'B.bbox head forward and loss {bbox_results}')
             for name, value in bbox_results['loss_bbox'].items():
                 losses[f's{i}.{name}'] = (
                     value * lw if 'loss' in name else value)
-
+                logger.info(f'value * lw {value}, {value * lw}, {value * lw}')
+            logger.info(f'B.show the updated losses {losses}')
             # mask head forward and loss
             if self.with_mask:
                 mask_results = self._mask_forward_train(
                     i, x, sampling_results, gt_masks, rcnn_train_cfg,
                     bbox_results['bbox_feats'])
                 # TODO: Support empty tensor input. #2280
+                logger.info(f'B.Support empty tensor input check the mask result {mask_results}')
                 if mask_results['loss_mask'] is not None:
                     for name, value in mask_results['loss_mask'].items():
                         losses[f's{i}.{name}'] = (
                             value * lw if 'loss' in name else value)
+                        logger.info(f'value * lw {value}, {value * lw}, {value * lw}')
 
             # refine bboxes
             if i < self.num_stages - 1:
@@ -159,7 +169,7 @@ class CascadeRoIHeadWGCN(CascadeRoIHead):
                     proposal_list = self.bbox_head[i].refine_bboxes(
                         bbox_results['rois'], roi_labels,
                         bbox_results['bbox_pred'], pos_is_gts, img_metas)
-
+        logger.info(f'B.losses last output in forward_traint CascadeRoIHeadWGCN {losses}')
         return losses
 
     def simple_test(self, x, proposal_list, img_metas, rescale=False):

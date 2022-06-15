@@ -8,6 +8,7 @@
 # Date           :    2021-05-20
 ######################################################################################################
 """
+from asyncio.log import logger
 from torch import nn
 from mmcv.runner import load_checkpoint
 
@@ -85,7 +86,9 @@ class NERHead(nn.Module):
         """
         loss = dict()
         loss_key = prefix + 'ner_loss_cls_ce'
+        logger.info(f'B.Compute the loss loss_key {loss_key}')
         loss[loss_key] = -self.loss_cls(emissions=pred, tags=target, mask=mask)
+        logger.info(f'B.loss {loss}')
         return loss
 
     def get_predict(self, pred, mask=None):

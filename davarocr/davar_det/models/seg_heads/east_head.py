@@ -10,6 +10,7 @@
 ##################################################################################################
 """
 
+from asyncio.log import logger
 import torch
 import torch.nn as nn
 from mmdet.models.builder import build_loss,HEADS
@@ -146,9 +147,10 @@ class EASTHead(nn.Module):
 
         # score_map loss
         loss["loss_seg_text"] = self.loss_seg(score_pred, score_map, weight=score_map_masks)
-
+        logger.info(f'B.score_map loss {loss}')
         # geo_map loss
         loss["loss_reg"] = self.loss_reg(reg_pred, geo_map, weight=geo_map_weights)
+        logger.info(f'B.loss_reg loss {loss}')
         return loss
 
     def get_seg_masks(self, mask_pred, img_meta):

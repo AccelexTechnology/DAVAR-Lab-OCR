@@ -9,6 +9,7 @@
 ##################################################################################################
 """
 
+from asyncio.log import logger
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -62,4 +63,5 @@ class StandardCrossEntropyLoss(nn.Module):
                                                       weight=weight,
                                                       ignore_index=self.ignore_index,
                                                       reduction=self.reduction)
+        logger.info(f'B.calculate the Standard Cross Entropy loss {loss_cls}')
         return loss_cls

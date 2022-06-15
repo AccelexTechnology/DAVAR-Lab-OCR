@@ -9,6 +9,7 @@
 ##################################################################################################
 """
 
+from asyncio.log import logger
 import torch
 from mmdet.models.roi_heads import StandardRoIHead
 from mmdet.models.builder import HEADS
@@ -76,14 +77,15 @@ class LGPMARoIHead(StandardRoIHead):
                                                     gt_bboxes, gt_labels,
                                                     img_metas)
             losses.update(bbox_results['loss_bbox'])
-
+            logger.info(f'B.bbox head forward and loss LGPMARoIHead {losses}')
         # mask head forward and loss
         if self.with_mask:
             mask_results = self._mask_forward_train(x, sampling_results,
                                                     bbox_results['bbox_feats'],
                                                     gt_masks, img_metas, gt_bboxes)
             losses.update(mask_results['loss_mask'])
-
+            logger.info(f'B.mask head forward and loss LGPMARoIHead {losses}')
+        logger.info(f'B.losses output of forward_train LGPMARoIHead {losses}')
         return losses
 
     def _mask_forward_train(self, x, sampling_results, bbox_feats, gt_masks,
