@@ -133,9 +133,10 @@ class LGPMA(TwoStageDetector):
                                                  gt_bboxes_ignore, gt_masks,
                                                  **kwargs)
         losses.update(roi_losses)
-        print (losses)
-        Logger.warning(f'losses {losses}')
-        logger.warning(f'losses {losses}')
+        print (f'print {losses}')
+        Logger.warning(f'L.W.losses {losses}')
+        logger.warning(f'l.w.losses {losses}')
+        logger.info(f'l.i.losses {losses}')
         # global forward and loss
         if self.with_global_seg:
             # Change shape to compatible DavarDefaultFormatBundle
